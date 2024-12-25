@@ -1,9 +1,21 @@
-import CategoryForm from "@/components/dashboard-forms/category-from";
+import EditPostForm from "@/components/dashboard-forms/post-edit-form";
 import Breadcrumb from "@/components/shared/breadcrumb";
 import { Button } from "@/components/ui/button";
+import config from "@/config";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default async function CreateCategoryPage() {
+export default async function EditPostPage( { params : {slug}} : {params: {slug: string}}) {
+
+    const result = await fetch(`${config.host}/api/post/${slug}`, {
+        cache: "no-store"
+    })
+    const post = await result.json()
+
+    if (!post?.data) {
+        return notFound()
+    }
+
     return (
         <div>
             <Breadcrumb />
@@ -17,7 +29,7 @@ export default async function CreateCategoryPage() {
                     </Button>
                 </div>
                 <div className="p-7">
-                    <CategoryForm />
+                    <EditPostForm post={post?.data} />
                 </div>
             </div>
         </div>

@@ -22,6 +22,7 @@ export const baseApi = createApi({
         "categories",
         "posts",
         "projects",
+        "experiences",
         "users",
         "userData",
     ],

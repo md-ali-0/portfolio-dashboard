@@ -117,3 +117,8 @@ body {
         @apply relative flex items-center gap-x-3.5 py-2 px-2.5 text-[15px] text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 w-full;
     }
 }
+
+
+.tox-menu {
+    z-index: 999;
+}

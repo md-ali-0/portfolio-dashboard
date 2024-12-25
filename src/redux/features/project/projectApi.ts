@@ -1,17 +1,17 @@
-import { Post, TQueryParam, TResponseRedux } from "@/types";
+import { Project, TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
 
-const postApi = baseApi.injectEndpoints({
+const projectApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getSinglePost: builder.query({
+        getSingleProject: builder.query({
             query: (id) => {
                 return {
-                    url: `/post/${id}`,
+                    url: `/project/${id}`,
                 };
             },
-            providesTags: ["posts"],
+            providesTags: ["projects"],
         }),
-        getAllPosts: builder.query({
+        getAllProjects: builder.query({
             query: (args) => {
                 const params = new URLSearchParams();
                 if (args) {
@@ -22,54 +22,54 @@ const postApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: `/post`,
+                    url: `/project`,
                     params: params,
                 };
             },
-            transformResponse: (response: TResponseRedux<Post[]>) => {
+            transformResponse: (response: TResponseRedux<Project[]>) => {
                 return {
                     data: response.data,
                     meta: response.meta,
                 };
             },
-            providesTags: ["posts"],
+            providesTags: ["projects"],
         }),
-        createPost: builder.mutation({
+        createProject: builder.mutation({
             query: (data) => {
                 return {
-                    url: "/post",
+                    url: "/project",
                     method: "POST",
                     body: data,
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["projects"],
         }),
-        updatePost: builder.mutation({
+        updateProject: builder.mutation({
             query: (data) => {
                 return {
-                    url: `/post/${data?.id}`,
+                    url: `/project/${data?.id}`,
                     method: "PATCH",
                     body: data?.formData,
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["projects"],
         }),
-        deletePost: builder.mutation({
+        deleteProject: builder.mutation({
             query: (id) => {
                 return {
-                    url: `/post/${id}`,
+                    url: `/project/${id}`,
                     method: "DELETE",
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["projects"],
         }),
     }),
 });
 
 export const {
-    useGetAllPostsQuery,
-    useCreatePostMutation,
-    useUpdatePostMutation,
-    useDeletePostMutation,
-    useGetSinglePostQuery
-} = postApi;
+    useGetAllProjectsQuery,
+    useCreateProjectMutation,
+    useUpdateProjectMutation,
+    useDeleteProjectMutation,
+    useGetSingleProjectQuery
+} = projectApi;

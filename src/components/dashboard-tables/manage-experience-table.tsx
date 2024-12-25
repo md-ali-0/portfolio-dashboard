@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -8,40 +9,43 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { ErrorResponse, Post, TMeta } from "@/types";
+import { ErrorResponse, Experience, TMeta } from "@/types";
 import { SerializedError } from "@reduxjs/toolkit";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
-import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { useDeletePostMutation, useGetAllPostsQuery } from "@/redux/features/post/postApi";
-import Link from "next/link";
+import { useGetAllExperiencesQuery } from "@/redux/features/experience/experienceApi";
+import { useDeletePostMutation } from "@/redux/features/post/postApi";
 import { DataTable } from "../data-table/data-table";
 import DeleteDialog from "../shared/delete-dialog";
 
-const ManagePostTable: FC = () => {
+const ManageExperienceTable: FC = () => {
     const [search, setSearch] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [postToDelete, setPostToDelete] = useState<Post | null>(null);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [experienceToEdit, setExperienceToEdit] = useState<Experience | null>(null);
 
-    const { data, isError, isLoading, isSuccess, error } = useGetAllPostsQuery([
-        {
-            name: "limit",
-            value: limit,
-        },
-        {
-            name: "page",
-            value: page,
-        },
-        {
-            name: "searchTerm",
-            value: search,
-        },
-    ]);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [postToDelete, setPostToDelete] = useState<Experience | null>(null);
+
+    const { data, isError, isLoading, isSuccess, error } =
+        useGetAllExperiencesQuery([
+            {
+                name: "limit",
+                value: limit,
+            },
+            {
+                name: "page",
+                value: page,
+            },
+            {
+                name: "searchTerm",
+                value: search,
+            },
+        ]);
 
     useEffect(() => {
         if (isError) {
@@ -49,36 +53,60 @@ const ManagePostTable: FC = () => {
         }
     }, [isError, isSuccess, error]);
 
-    const handleDeleteClick = (post: Post) => {
-        setPostToDelete(post);
+    const handleEditClick = (experience: Experience) => {
+        setExperienceToEdit(experience);
+        setEditDialogOpen(true);
+    };
+
+    const handleDeleteClick = (experience: Experience) => {
+        setPostToDelete(experience);
         setDeleteDialogOpen(true);
     };
 
-    const columns: ColumnDef<Post>[] = [
+    const columns: ColumnDef<Experience>[] = [
         {
-            accessorKey: "image",
-            header: "Image",
+            accessorKey: "companyName",
+            header: "Company Name",
+        },
+        {
+            accessorKey: "position",
+            header: "Position",
+        },
+        {
+            accessorKey: "startDate",
+            header: "Start Date",
             cell: ({ row }) => {
                 return (
-                    <div className="rounded-md overflow-hidden w-16">
-                        <Image
-                            src={`${row.original?.thumbnail}`}
-                            alt={row.original.title}
-                            width={100}
-                            height={100}
-                            className="rounded-md transition-all transform ease-in-out duration-200 hover:scale-105"
-                        />
+                    <div className="">
+                        {new Date(
+                            String(row.original.startDate)
+                        ).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        })}
                     </div>
                 );
             },
         },
         {
-            accessorKey: "title",
-            header: "Title",
-        },
-        {
-            accessorKey: "slug",
-            header: "Slug",
+            accessorKey: "endDate",
+            header: "End Date",
+            cell: ({ row }) => {
+                return (
+                    <div className="">
+                        {row.original.endDate ? new Date(
+                            String(row.original.endDate)
+                        ).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        }) : "Present"}
+                    </div>
+                );
+            },
         },
         {
             accessorKey: "Last Updated",
@@ -111,9 +139,9 @@ const ManagePostTable: FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                                asChild
+                                onClick={() => handleEditClick(row.original)}
                             >
-                                <Link href={`/dashboard/edit-post/${row.original.slug}`}>Edit</Link>
+                                Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => handleDeleteClick(row.original)}
@@ -177,4 +205,4 @@ const ManagePostTable: FC = () => {
     );
 };
 
-export default ManagePostTable;
+export default ManageExperienceTable;

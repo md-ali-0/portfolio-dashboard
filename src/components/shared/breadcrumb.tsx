@@ -10,14 +10,10 @@ const Breadcrumb = () => {
 
     return (
         <nav className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-            {/* <Link
-                href="/"
-                className="text-slate-950 dark:text-gray-100 hover:underline"
-            >
-                Home
-            </Link> */}
             {pathnames.map((value, index) => {
-                const currentPath = `/${pathnames.slice(0, index + 1).join("/")}`;
+                const currentPath = `/${pathnames
+                    .slice(0, index + 1)
+                    .join("/")}`;
                 const isLast = index === pathnames.length - 1;
 
                 return isLast ? (
@@ -29,7 +25,7 @@ const Breadcrumb = () => {
                     </span>
                 ) : (
                     <span key={index} className="flex items-center space-x-2">
-                        {/* <span>/</span> */}
+                        {currentPath !== "/dashboard" && <span>/</span>}
                         <Link
                             href={currentPath}
                             className="text-slate-950 dark:text-gray-100 capitalize hover:underline"

@@ -1,17 +1,17 @@
-import { Post, TQueryParam, TResponseRedux } from "@/types";
+import { Experience, TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
 
-const postApi = baseApi.injectEndpoints({
+const experienceApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getSinglePost: builder.query({
+        getSingleExperience: builder.query({
             query: (id) => {
                 return {
-                    url: `/post/${id}`,
+                    url: `/experience/${id}`,
                 };
             },
-            providesTags: ["posts"],
+            providesTags: ["experiences"],
         }),
-        getAllPosts: builder.query({
+        getAllExperiences: builder.query({
             query: (args) => {
                 const params = new URLSearchParams();
                 if (args) {
@@ -22,54 +22,54 @@ const postApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: `/post`,
+                    url: `/experience`,
                     params: params,
                 };
             },
-            transformResponse: (response: TResponseRedux<Post[]>) => {
+            transformResponse: (response: TResponseRedux<Experience[]>) => {
                 return {
                     data: response.data,
                     meta: response.meta,
                 };
             },
-            providesTags: ["posts"],
+            providesTags: ["experiences"],
         }),
-        createPost: builder.mutation({
+        createExperience: builder.mutation({
             query: (data) => {
                 return {
-                    url: "/post",
+                    url: "/experience",
                     method: "POST",
                     body: data,
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["experiences"],
         }),
-        updatePost: builder.mutation({
+        updateExperience: builder.mutation({
             query: (data) => {
                 return {
-                    url: `/post/${data?.id}`,
+                    url: `/experience/${data.id}`,
                     method: "PATCH",
-                    body: data?.formData,
+                    body: data.data,
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["experiences"],
         }),
-        deletePost: builder.mutation({
+        deleteExperience: builder.mutation({
             query: (id) => {
                 return {
-                    url: `/post/${id}`,
+                    url: `/experience/${id}`,
                     method: "DELETE",
                 };
             },
-            invalidatesTags: ["posts"],
+            invalidatesTags: ["experiences"],
         }),
     }),
 });
 
 export const {
-    useGetAllPostsQuery,
-    useCreatePostMutation,
-    useUpdatePostMutation,
-    useDeletePostMutation,
-    useGetSinglePostQuery
-} = postApi;
+    useGetAllExperiencesQuery,
+    useGetSingleExperienceQuery,
+    useCreateExperienceMutation,
+    useUpdateExperienceMutation,
+    useDeleteExperienceMutation,
+} = experienceApi;

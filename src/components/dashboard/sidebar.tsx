@@ -40,7 +40,7 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 menu={{
                                     name: "Dashboard",
                                     icon: "LayoutDashboard",
-                                    path: "/",
+                                    path: "/dashboard",
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
@@ -94,40 +94,22 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
-                            <SidebarSubMenu
+                            <SideBarMenuItem
                                 menu={{
                                     name: "Languages",
                                     icon: "Languages",
+                                    path: "/dashboard/languages",
                                 }}
-                                subMenu={[
-                                    {
-                                        name: "Create Language",
-                                        path: "/dashboard/create-language",
-                                    },
-                                    {
-                                        name: "Manage Languages",
-                                        path: "/dashboard/languages",
-                                    },
-                                ]}
                                 setSidebarOpen={setSidebarOpen}
-                            ></SidebarSubMenu>
-                            <SidebarSubMenu
+                            />
+                            <SideBarMenuItem
                                 menu={{
                                     name: "Skills",
                                     icon: "Brain",
+                                    path: "/dashboard/skills",
                                 }}
-                                subMenu={[
-                                    {
-                                        name: "Create Skill",
-                                        path: "/dashboard/create-skill",
-                                    },
-                                    {
-                                        name: "Manage Skills",
-                                        path: "/dashboard/Skills",
-                                    },
-                                ]}
                                 setSidebarOpen={setSidebarOpen}
-                            ></SidebarSubMenu>
+                            />
                             <SideBarMenuItem
                                 menu={{
                                     name: "Technologies",

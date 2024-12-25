@@ -111,16 +111,6 @@ const SignInForm: React.FC = () => {
                         Sign in
                     </Button>
                 </div>
-
-                <p className="text-gray-800 text-sm !mt-8 text-center">
-                    Don&apos;t have an account?{" "}
-                    <Link
-                        href="/auth/signup"
-                        className="text-primary hover:underline ml-1 whitespace-nowrap font-semibold"
-                    >
-                        Register here
-                    </Link>
-                </p>
             </form>
         </div>
     );

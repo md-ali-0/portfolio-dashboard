@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { ErrorResponse, Post, TMeta } from "@/types";
+import { ErrorResponse, Project, TMeta } from "@/types";
 import { SerializedError } from "@reduxjs/toolkit";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
@@ -16,19 +16,20 @@ import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { useDeletePostMutation, useGetAllPostsQuery } from "@/redux/features/post/postApi";
+import { useDeletePostMutation } from "@/redux/features/post/postApi";
+import { useGetAllProjectsQuery } from "@/redux/features/project/projectApi";
 import Link from "next/link";
 import { DataTable } from "../data-table/data-table";
 import DeleteDialog from "../shared/delete-dialog";
 
-const ManagePostTable: FC = () => {
+const ManageProjectTable: FC = () => {
     const [search, setSearch] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [postToDelete, setPostToDelete] = useState<Post | null>(null);
+    const [postToDelete, setPostToDelete] = useState<Project | null>(null);
 
-    const { data, isError, isLoading, isSuccess, error } = useGetAllPostsQuery([
+    const { data, isError, isLoading, isSuccess, error } = useGetAllProjectsQuery([
         {
             name: "limit",
             value: limit,
@@ -49,12 +50,12 @@ const ManagePostTable: FC = () => {
         }
     }, [isError, isSuccess, error]);
 
-    const handleDeleteClick = (post: Post) => {
+    const handleDeleteClick = (post: Project) => {
         setPostToDelete(post);
         setDeleteDialogOpen(true);
     };
 
-    const columns: ColumnDef<Post>[] = [
+    const columns: ColumnDef<Project>[] = [
         {
             accessorKey: "image",
             header: "Image",
@@ -177,4 +178,4 @@ const ManagePostTable: FC = () => {
     );
 };
 
-export default ManagePostTable;
+export default ManageProjectTable;
