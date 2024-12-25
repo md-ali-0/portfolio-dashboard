@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -10,12 +11,13 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/provider/session-provider";
 import { useGetAllLanguagesQuery } from "@/redux/features/language/languageApi";
-import { useCreateProjectMutation } from "@/redux/features/project/projectApi";
+import { useUpdateProjectMutation } from "@/redux/features/project/projectApi";
 import { useGetAllTechnologiesQuery } from "@/redux/features/technology/technologyApi";
-import { ErrorResponse } from "@/types";
+import { ErrorResponse, Project } from "@/types";
 import { formatDate } from "@/utils/date-format";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
@@ -26,46 +28,37 @@ import { toast } from "sonner";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import SelectMultiple from "../ui/select-multiple";
-import { Textarea } from "../ui/textarea";
 
 type MultiSelectOption = {
     label: string;
     value: string;
 };
 
-type ProjectFormValues = {
-    title: string;
-    slug: string;
-    content: string;
-    thumbnail: File | null;
-    images: FileList | null;
-    liveUrl?: string;
-    StartDate: string;
-    EndDate?: string;
-    metaTitle?: string;
-    metaDesc?: string;
-    metaKey?: string;
-    languages: string[];
-    technologies: string[];
-};
 
-export default function ProjectForm() {
-    const form = useForm<ProjectFormValues>({
-        defaultValues: {
+interface EditProjectProps {
+    project: Project | null;
+}
+
+export default function EditProjectForm({ project }: EditProjectProps) {
+    console.log(project);
+    
+    const form = useForm<Project>({
+        defaultValues: project || {
             title: "",
             slug: "",
             content: "",
             thumbnail: null,
             images: null,
             liveUrl: "",
-            StartDate: "",
-            EndDate: "",
+            StartDate: undefined,
+            EndDate: undefined,
             metaTitle: "",
             metaDesc: "",
             metaKey: "",
             languages: [],
             technologies: [],
         },
+        values: project || undefined,
     });
 
     const { data: languages } = useGetAllLanguagesQuery([
@@ -82,16 +75,39 @@ export default function ProjectForm() {
     ]);
 
     const { session } = useSession();
+
     const { watch, setValue, reset } = form;
-    const title = watch("title");
+    const name = watch("title");
 
     useEffect(() => {
-        const slug = generateSlug(title);
+        const slug = generateSlug(name);
         setValue("slug", slug);
-    }, [title, setValue]);
+    }, [name, setValue]);
 
-    const [addProject, { isSuccess, isLoading, isError, error }] =
-        useCreateProjectMutation();
+    const [updateProject, { isSuccess, isError, isLoading, error }] =
+        useUpdateProjectMutation();
+
+    useEffect(
+        () =>
+            reset(
+                project || {
+                    title: "",
+                    slug: "",
+                    content: "",
+                    thumbnail: null,
+                    images: null,
+                    liveUrl: "",
+                    StartDate: undefined,
+                    EndDate: undefined,
+                    metaTitle: "",
+                    metaDesc: "",
+                    metaKey: "",
+                    languages: [],
+                    technologies: [],
+                }
+            ),
+        [project, reset]
+    );
 
     useEffect(() => {
         if (isError) {
@@ -128,7 +144,7 @@ export default function ProjectForm() {
         setValue("technologies", selectedOptions);
     };
 
-    const onSubmit = async (data: ProjectFormValues) => {
+    const onSubmit = async (data: Project) => {
         const { thumbnail, images, ...projectData } = data;
 
         const formData = new FormData();
@@ -144,8 +160,8 @@ export default function ProjectForm() {
             "data",
             JSON.stringify({ ...projectData, authorId: session?.user })
         );
-        const loadingToast = toast.loading("Project is Creating...");
-        await addProject(formData);
+        const loadingToast = toast.loading("Project is Updating...");
+        await updateProject({data:formData, id: project?.id});
         toast.dismiss(loadingToast);
     };
 
@@ -165,6 +181,7 @@ export default function ProjectForm() {
                                         id="title"
                                         placeholder="Enter Project Title"
                                         {...field}
+                                        value={field.value ?? ""}
                                         required
                                     />
                                 </FormControl>
@@ -250,6 +267,7 @@ export default function ProjectForm() {
                                         id="liveUrl"
                                         placeholder="Enter Live URL"
                                         {...field}
+                                        value={field.value ?? ""}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -342,7 +360,7 @@ export default function ProjectForm() {
                                                 )}
                                             >
                                                 {field.value ? (
-                                                    formatDate(field.value)
+                                                    formatDate(field.value as unknown as string)
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -387,7 +405,7 @@ export default function ProjectForm() {
                                                 )}
                                             >
                                                 {field.value ? (
-                                                    formatDate(field.value)
+                                                    formatDate(field.value as unknown as string)
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -431,6 +449,7 @@ export default function ProjectForm() {
                                         id="metaTitle"
                                         placeholder="Enter Meta Title"
                                         {...field}
+                                        value={field.value ?? ""}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -450,6 +469,7 @@ export default function ProjectForm() {
                                         id="metaDesc"
                                         placeholder="Enter Meta Description"
                                         {...field}
+                                        value={field.value ?? ""}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -469,6 +489,7 @@ export default function ProjectForm() {
                                         id="metaKey"
                                         placeholder="Enter Meta Keywords"
                                         {...field}
+                                        value={field.value ?? ""}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -477,10 +498,9 @@ export default function ProjectForm() {
                     />
                 </section>
 
-                {/* Submit Button */}
                 <div className="py-5">
-                    <Button type="submit">
-                        {isLoading ? "Creating Project..." : "Create Project"}
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? "Updating Post..." : "Update Post"}
                     </Button>
                 </div>
             </form>

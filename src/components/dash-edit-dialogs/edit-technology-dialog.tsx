@@ -8,9 +8,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useUpdateCategoryMutation } from "@/redux/features/category/categoryApi";
-import { Category, ErrorResponse } from "@/types";
-import { generateSlug } from "@/utils/genereateSlug";
+import { useUpdateTechnologyMutation } from "@/redux/features/technology/technologyApi";
+import { ErrorResponse, Language, Technology } from "@/types";
 import { SerializedError } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -24,34 +23,27 @@ import {
     FormMessage,
 } from "./../ui/form";
 
-interface EditCategoryDialogProps {
-    category: Category | null;
+interface EditTechnologyDialogProps {
+    technology: Technology | null;
     open: boolean;
     onClose: () => void;
 }
 
-const EditCategoryDialog = ({
-    category,
+const EditTechnologyDialog = ({
+    technology,
     open,
     onClose,
-}: EditCategoryDialogProps) => {
-    const form = useForm<Category>({
-        defaultValues: category || {
+}: EditTechnologyDialogProps) => {
+    const form = useForm<Technology>({
+        defaultValues: technology || {
             name: "",
-            slug: "",
         },
-        values: category || undefined,
+        values: technology || undefined,
     });
-    const { watch, setValue, reset } = form;
-    const name = watch("name");
+    const { reset } = form;
 
-    useEffect(() => {
-        const slug = generateSlug(name);
-        setValue("slug", slug);
-    }, [name, setValue]);
-
-    const [updatecategory, { isSuccess, isError, error }] =
-        useUpdateCategoryMutation();
+    const [updateLanguage, { isSuccess, isError, error }] =
+        useUpdateTechnologyMutation();
 
     useEffect(() => {
         if (isError) {
@@ -63,24 +55,25 @@ const EditCategoryDialog = ({
 
             toast.error(errorMessage);
         } else if (isSuccess) {
-            toast.success("Category Successfully Updated");
+            toast.success("Technology Successfully Updated");
         }
     }, [isError, isSuccess, error]);
 
-    useEffect(() => {
-        reset(
-            category || {
-                name: "",
-                slug: "",
-            }
-        );
-    }, [category, reset]);
+    useEffect(
+        () =>
+            reset(
+                technology || {
+                    name: "",
+                }
+            ),
+        [technology, reset]
+    );
 
-    const onSubmit = async (data: Category) => {
-        const loadingToast = toast.loading("Category is Updating...");
+    const onSubmit = async (data: Language) => {
+        const loadingToast = toast.loading("Technology is Updating...");
 
-        if (category) {
-            await updatecategory({ data, id: category?.id });
+        if (technology) {
+            await updateLanguage({ data, id: technology?.id });
         }
         onClose();
         toast.dismiss(loadingToast);
@@ -93,25 +86,25 @@ const EditCategoryDialog = ({
                 className="sm:max-w-[525px]"
             >
                 <DialogHeader>
-                    <DialogTitle>Edit Category</DialogTitle>
+                    <DialogTitle>Edit Technology</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="grid grid-cols-2 gap-4"
+                        className="grid grid-cols-1 gap-4"
                     >
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem className="col-span-2">
+                                <FormItem>
                                     <FormLabel htmlFor="name">
-                                        Category Name
+                                        Technology Name
                                     </FormLabel>
                                     <FormControl>
                                         <Input
                                             id="name"
-                                            placeholder="Enter Category name"
+                                            placeholder="Enter Technology Name"
                                             {...field}
                                             required
                                         />
@@ -120,26 +113,7 @@ const EditCategoryDialog = ({
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="slug"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="slug">
-                                        Category Slug
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            id="slug"
-                                            placeholder="Enter Category Slug"
-                                            {...field}
-                                            required
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
                         <DialogFooter className="col-span-2">
                             <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
@@ -153,4 +127,4 @@ const EditCategoryDialog = ({
     );
 };
 
-export default EditCategoryDialog;
+export default EditTechnologyDialog;

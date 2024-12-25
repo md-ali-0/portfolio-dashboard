@@ -148,7 +148,7 @@ const ManagePostTable: FC = () => {
 
             toast.error(errorMessage);
         } else if (isDeleteSuccess) {
-            toast.success("Brand Deleted successfully");
+            toast.success("Post Deleted successfully");
         }
     }, [isDeleteError, isDeleteSuccess, deleteError]);
 

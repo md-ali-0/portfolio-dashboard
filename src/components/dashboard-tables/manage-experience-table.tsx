@@ -16,8 +16,8 @@ import { MoreVertical } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { useGetAllExperiencesQuery } from "@/redux/features/experience/experienceApi";
-import { useDeletePostMutation } from "@/redux/features/post/postApi";
+import { useDeleteExperienceMutation, useGetAllExperiencesQuery } from "@/redux/features/experience/experienceApi";
+import EditExperienceDialog from "../dash-edit-dialogs/edit-experience-dialog";
 import { DataTable } from "../data-table/data-table";
 import DeleteDialog from "../shared/delete-dialog";
 
@@ -26,7 +26,9 @@ const ManageExperienceTable: FC = () => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
-    const [experienceToEdit, setExperienceToEdit] = useState<Experience | null>(null);
+    const [experienceToEdit, setExperienceToEdit] = useState<Experience | null>(
+        null
+    );
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [postToDelete, setPostToDelete] = useState<Experience | null>(null);
@@ -96,14 +98,16 @@ const ManageExperienceTable: FC = () => {
             cell: ({ row }) => {
                 return (
                     <div className="">
-                        {row.original.endDate ? new Date(
-                            String(row.original.endDate)
-                        ).toLocaleDateString("en-US", {
-                            weekday: "short",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        }) : "Present"}
+                        {row.original.endDate
+                            ? new Date(
+                                  String(row.original.endDate)
+                              ).toLocaleDateString("en-US", {
+                                  weekday: "short",
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                              })
+                            : "Present"}
                     </div>
                 );
             },
@@ -162,7 +166,7 @@ const ManageExperienceTable: FC = () => {
             isError: isDeleteError,
             error: deleteError,
         },
-    ] = useDeletePostMutation();
+    ] = useDeleteExperienceMutation();
 
     useEffect(() => {
         if (isDeleteError) {
@@ -176,7 +180,7 @@ const ManageExperienceTable: FC = () => {
 
             toast.error(errorMessage);
         } else if (isDeleteSuccess) {
-            toast.success("Brand Deleted successfully");
+            toast.success("Experience Deleted successfully");
         }
     }, [isDeleteError, isDeleteSuccess, deleteError]);
 
@@ -194,6 +198,11 @@ const ManageExperienceTable: FC = () => {
                 onPageChange={setPage}
                 onPageSizeChange={setLimit}
                 meta={data?.meta as TMeta}
+            />
+            <EditExperienceDialog
+                experience={experienceToEdit}
+                open={editDialogOpen}
+                onClose={() => setEditDialogOpen(false)}
             />
             <DeleteDialog
                 id={postToDelete?.id as string}
