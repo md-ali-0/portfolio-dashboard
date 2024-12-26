@@ -99,6 +99,7 @@ export default function AboutMeForm() {
                                         placeholder="Enter a short description"
                                         {...field}
                                         required
+                                        rows={5}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -118,6 +119,7 @@ export default function AboutMeForm() {
                                         placeholder="Write about yourself"
                                         {...field}
                                         required
+                                        rows={6}
                                     />
                                 </FormControl>
                                 <FormMessage />

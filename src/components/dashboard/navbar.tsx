@@ -149,7 +149,7 @@ const DashNavbar: FC<DashNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                             }`}
                         >
                             <Link
-                                href="/profile"
+                                href="/personal-information"
                                 className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-[#0C1427] dark:hover:bg-slate-600 hover:text-white"
                             >
                                 <LucideUserCircle size={18} />
