@@ -26,11 +26,11 @@ export const metadata: Metadata = {
         title: "Mohammad Ali | Full Stack Developer Portfolio",
         description:
             "Discover the work and expertise of Mohammad Ali, a passionate full stack developer creating innovative web applications.",
-        url: "https://md-ali.vercel.app",
+        url: "https://app-md-ali.vercel.app",
         siteName: "Mohammad Ali Portfolio",
         images: [
             {
-                url: "https://md-ali.vercel.app/og-image.png",
+                url: "https://app-md-ali.vercel.app/og-image.png",
                 width: 1200,
                 height: 630,
                 alt: "Mohammad Ali - Full Stack Developer Portfolio",
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
         title: "Mohammad Ali | Full Stack Developer Portfolio",
         description:
             "Get to know Mohammad Ali, a full stack web developer with expertise in frontend and backend technologies. View projects and blogs.",
-        images: ["https://md-ali.vercel.app/og-image.png"],
+        images: ["https://app-md-ali.vercel.app/og-image.png"],
     },
     alternates: {
-        canonical: "https://www.md-ali.vercel.app/",
+        canonical: "https://www.app-md-ali.vercel.app",
     },
     robots: {
         index: true,
@@ -57,8 +57,8 @@ export const metadata: Metadata = {
             "@context": "https://schema.org",
             "@type": "Person",
             name: "Mohammad Ali",
-            url: "https://www.md-ali.vercel.app/",
-            image: "https://www.md-ali.vercel.app/profile-image.png",
+            url: "https://www.app-md-ali.vercel.app/",
+            image: "https://www.app-md-ali.vercel.app/profile-image.png",
             description:
                 "Full stack web developer with experience in building dynamic and scalable web applications using modern technologies.",
         }),
