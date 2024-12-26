@@ -7,6 +7,8 @@ export type Project = {
     authorId: string;
     images: string[] | null;
     liveUrl: string | null;
+    SourceFront: string | null;
+    SourceBack: string | null;
     StartDate: Date;
     EndDate: Date | null;
     category: string;

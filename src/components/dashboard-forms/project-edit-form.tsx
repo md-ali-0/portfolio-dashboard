@@ -14,9 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/provider/session-provider";
-import { useGetAllLanguagesQuery } from "@/redux/features/language/languageApi";
 import { useUpdateProjectMutation } from "@/redux/features/project/projectApi";
-import { useGetAllTechnologiesQuery } from "@/redux/features/technology/technologyApi";
 import { ErrorResponse, Project } from "@/types";
 import { formatDate } from "@/utils/date-format";
 import { generateSlug } from "@/utils/genereateSlug";
@@ -27,21 +25,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import SelectMultiple from "../ui/select-multiple";
-
-type MultiSelectOption = {
-    label: string;
-    value: string;
-};
-
+import TagInput from "../ui/tag-input";
 
 interface EditProjectProps {
     project: Project | null;
 }
 
 export default function EditProjectForm({ project }: EditProjectProps) {
-    console.log(project);
-    
     const form = useForm<Project>({
         defaultValues: project || {
             title: "",
@@ -50,6 +40,8 @@ export default function EditProjectForm({ project }: EditProjectProps) {
             thumbnail: null,
             images: null,
             liveUrl: "",
+            SourceFront: "",
+            SourceBack: "",
             StartDate: undefined,
             EndDate: undefined,
             metaTitle: "",
@@ -60,19 +52,6 @@ export default function EditProjectForm({ project }: EditProjectProps) {
         },
         values: project || undefined,
     });
-
-    const { data: languages } = useGetAllLanguagesQuery([
-        {
-            name: "limit",
-            value: 999,
-        },
-    ]);
-    const { data: technologies } = useGetAllTechnologiesQuery([
-        {
-            name: "limit",
-            value: 999,
-        },
-    ]);
 
     const { session } = useSession();
 
@@ -124,26 +103,6 @@ export default function EditProjectForm({ project }: EditProjectProps) {
         }
     }, [isError, isSuccess, error, reset]);
 
-    const languageOptions: MultiSelectOption[] =
-        languages?.data?.map((item) => ({
-            label: item.name,
-            value: String(item.id),
-        })) || [];
-
-    const technologyOptions: MultiSelectOption[] =
-        technologies?.data?.map((item) => ({
-            label: item.name,
-            value: String(item.id),
-        })) || [];
-
-    const onLanguageChange = (selectedOptions: string[]) => {
-        setValue("languages", selectedOptions);
-    };
-
-    const onTechnologyChange = (selectedOptions: string[]) => {
-        setValue("technologies", selectedOptions);
-    };
-
     const onSubmit = async (data: Project) => {
         const { thumbnail, images, ...projectData } = data;
 
@@ -161,7 +120,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
             JSON.stringify({ ...projectData, authorId: session?.user })
         );
         const loadingToast = toast.loading("Project is Updating...");
-        await updateProject({data:formData, id: project?.id});
+        await updateProject({ data: formData, id: project?.id });
         toast.dismiss(loadingToast);
     };
 
@@ -276,19 +235,18 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="languages"
-                        render={() => (
+                        name="SourceFront"
+                        render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="languages">
-                                    Select Languages
+                                <FormLabel htmlFor="SourceFront">
+                                    Source Front (Optional)
                                 </FormLabel>
                                 <FormControl>
-                                    <SelectMultiple
-                                        options={languageOptions}
-                                        onChange={onLanguageChange} // onLanguageChange should now accept string[]
-                                        selectedOptions={form.watch(
-                                            "languages"
-                                        )}
+                                    <Input
+                                        id="SourceFront"
+                                        placeholder="Enter Source Front"
+                                        {...field}
+                                        value={field.value ?? ""}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -297,19 +255,61 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="technologies"
-                        render={() => (
+                        name="SourceBack"
+                        render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="technologies">
-                                    Select Technologies
+                                <FormLabel htmlFor="SourceBack">
+                                    Source Back (Optional)
                                 </FormLabel>
                                 <FormControl>
-                                    <SelectMultiple
-                                        options={technologyOptions}
-                                        onChange={onTechnologyChange}
-                                        selectedOptions={form.watch(
-                                            "technologies"
-                                        )}
+                                    <Input
+                                        id="SourceBack"
+                                        placeholder="Enter Source Back"
+                                        {...field}
+                                        value={field.value ?? ""}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="languages"
+                        render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                                <FormLabel htmlFor="languages">
+                                    Languages
+                                </FormLabel>
+                                <FormControl>
+                                    <TagInput
+                                        value={field.value || []}
+                                        onChange={(tags) =>
+                                            field.onChange(tags)
+                                        }
+                                        placeholder="Add languages (e.g., JavaScript, Python)"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="technologies"
+                        render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                                <FormLabel htmlFor="technologies">
+                                    Technologies
+                                </FormLabel>
+                                <FormControl>
+                                    <TagInput
+                                        value={field.value || []}
+                                        onChange={(tags) =>
+                                            field.onChange(tags)
+                                        }
+                                        placeholder="Add technologies (e.g., React, Node.js)"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -360,7 +360,9 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                                 )}
                                             >
                                                 {field.value ? (
-                                                    formatDate(field.value as unknown as string)
+                                                    formatDate(
+                                                        field.value as unknown as string
+                                                    )
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -405,7 +407,9 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                                 )}
                                             >
                                                 {field.value ? (
-                                                    formatDate(field.value as unknown as string)
+                                                    formatDate(
+                                                        field.value as unknown as string
+                                                    )
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}

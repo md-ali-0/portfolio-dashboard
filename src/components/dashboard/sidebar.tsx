@@ -96,36 +96,20 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                             />
                             <SideBarMenuItem
                                 menu={{
-                                    name: "Languages",
-                                    icon: "Languages",
-                                    path: "/dashboard/languages",
-                                }}
-                                setSidebarOpen={setSidebarOpen}
-                            />
-                            <SideBarMenuItem
-                                menu={{
                                     name: "Skills",
                                     icon: "Brain",
                                     path: "/dashboard/skills",
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
-                            <SideBarMenuItem
-                                menu={{
-                                    name: "Technologies",
-                                    icon: "Cpu",
-                                    path: "/dashboard/technologies",
-                                }}
-                                setSidebarOpen={setSidebarOpen}
-                            />
                             <h4 className="text-gray-400 font-semibold text-xs mt-2">
-                                Settings
+                                About Me
                             </h4>
                             <SideBarMenuItem
                                 menu={{
-                                    name: "Settings",
-                                    icon: "Settings",
-                                    path: "/dashboard/settings",
+                                    name: "Personal Information",
+                                    icon: "User",
+                                    path: "/dashboard/personal-information",
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />

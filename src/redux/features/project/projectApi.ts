@@ -49,7 +49,7 @@ const projectApi = baseApi.injectEndpoints({
                 return {
                     url: `/project/${data?.id}`,
                     method: "PATCH",
-                    body: data?.formData,
+                    body: data?.data,
                 };
             },
             invalidatesTags: ["projects"],

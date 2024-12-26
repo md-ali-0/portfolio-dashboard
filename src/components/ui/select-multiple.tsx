@@ -38,30 +38,6 @@ const SelectMultiple: React.FC<SelectMultipleProps> = ({
 
     return (
         <SelectPrimitive.Root>
-            {/* <SelectTrigger>
-                <span>
-                    {selectedOptions.length > 0
-                        ? selectedOptions.length > 3
-                            ? `${selectedOptions
-                                  .slice(0, 3) // Show only the first 3 selected options
-                                  .map((id) => {
-                                      const option = options.find(
-                                          (option) => option.value === id
-                                      );
-                                      return option ? option.label : ""; // Find label for each selected option ID
-                                  })
-                                  .join(", ")} ++ More..`
-                            : selectedOptions
-                                  .map((id) => {
-                                      const option = options.find(
-                                          (option) => option.value === id
-                                      );
-                                      return option ? option.label : ""; // Find label for each selected option ID
-                                  })
-                                  .join(", ")
-                        : "Select options"}
-                </span>
-            </SelectTrigger> */}
             <SelectTrigger>
                 <span>
                     {selectedOptions.length > 0
@@ -86,6 +62,30 @@ const SelectMultiple: React.FC<SelectMultipleProps> = ({
                         : "Select options"}
                 </span>
             </SelectTrigger>
+            {/* <SelectTrigger>
+                <span>
+                    {selectedOptions.length > 0
+                        ? selectedOptions.length > 3
+                            ? `${selectedOptions
+                                  .slice(0, 3) // Show only the first 3 selected options
+                                  .map((id) => {
+                                      const option = options.find(
+                                          (option) => option.value === id
+                                      );
+                                      return option ? option.label : ""; // Find label for each selected option ID
+                                  })
+                                  .join(", ")} ++ More..`
+                            : selectedOptions
+                                  .map((id) => {
+                                      const option = options.find(
+                                          (option) => option.value === id
+                                      );
+                                      return option ? option.label : ""; // Find label for each selected option ID
+                                  })
+                                  .join(", ")
+                        : "Select options"}
+                </span>
+            </SelectTrigger> */}
             <SelectContent>
                 {/* Search input field */}
                 <input

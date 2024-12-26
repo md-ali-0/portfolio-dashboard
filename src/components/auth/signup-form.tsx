@@ -1,6 +1,6 @@
 "use client";
 import { useSignUpUserMutation } from "@/redux/features/auth/authApi";
-import { SignupSchema } from "@/schema/siginup.schema";
+import { SignupSchema } from "@/schema/signup.schema";
 import { ErrorResponse } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SerializedError } from "@reduxjs/toolkit";
