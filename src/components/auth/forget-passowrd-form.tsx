@@ -8,6 +8,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 interface FormValues {
@@ -28,7 +29,8 @@ export default function ForgetPassowrdForm() {
             rememberMe: false,
         },
     });
-    const [forgotPassword, { isSuccess, isError, error }] = useForgetPasswordMutation();
+    const [forgotPassword, { isSuccess, isError, error }] =
+        useForgetPasswordMutation();
 
     const [loading, setLoading] = useState(false);
 
@@ -49,41 +51,43 @@ export default function ForgetPassowrdForm() {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         setLoading(true);
-        await forgotPassword(data)
+        await forgotPassword(data);
         setLoading(false);
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-y-4">
+        <div className="p-8 rounded-2xl bg-white border">
+            <h2 className="text-gray-800 text-center text-2xl font-bold">
+                Forgot your password?
+            </h2>
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4">
                 <div>
-                    <label
-                        htmlFor="email"
-                        className="block text-sm font-bold ml-1 mb-2 dark:text-white"
-                    >
+                    <label className="text-gray-800 text-sm mb-2 block">
                         Email address
                     </label>
-                    <div className="relative">
+                    <div>
                         <Input
-                            type="email"
-                            placeholder="Enter your Email"
-                            className="w-full border h-auto py-3 px-6 text-base text-muted-foreground outline-none focus-visible:shadow-none focus:border-primary transition"
                             {...register("email")}
+                            type="email"
+                            placeholder="Enter your email"
+                            className={errors.email ? "border-red-500" : ""}
                         />
+                        {errors.email && (
+                            <span className="text-red-500 text-sm">
+                                {errors.email.message}
+                            </span>
+                        )}
                     </div>
-                    {errors.email && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.email.message}
-                        </p>
-                    )}
                 </div>
-                <button
-                    disabled={loading}
-                    className="w-full bg-primary text-white py-4 rounded-sm"
-                >
-                    {loading ? "Sending Verification Email.." : "Send Verification Email"}
-                </button>
-            </div>
-        </form>
+
+                <div className="!mt-8">
+                    <Button type="submit" disabled={loading} className="w-full">
+                        {loading
+                            ? "Sending Verification Email.."
+                            : "Send Verification Email"}
+                    </Button>
+                </div>
+            </form>
+        </div>
     );
 }
