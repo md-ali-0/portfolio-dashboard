@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Project
 
-## Getting Started
+## Portfolio Website
 
-First, run the development server:
+- **Live Site**: [https://md-ali.vercel.app](https://md-ali.vercel.app)
+- **Frontend Repository**: [Portfolio Frontend](https://github.com/md-ali-0/portfolio)
+- **Dashboard Repository**: [Portfolio Dashboard](https://github.com/md-ali-0/portfolio-dashboard)
+- **Backend Repository**: [Portfolio API](https://github.com/md-ali-0/portfolio-api)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Portfolio Dashboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Live Dashboard**: [https://app-md-ali.vercel.app](https://app-md-ali.vercel.app)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### Portfolio Website:
+- Fully responsive design.
+- Dynamic CV upload functionality for the admin.
+- Showcases projects, skills, and experiences.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Portfolio Dashboard:
+- Admin-only dashboard for managing the portfolio.
+- Add, update, and delete projects, blogs, and other content.
+- User-friendly interface.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend:
+- Built with a custom Node.js server.
+- RESTful APIs for managing portfolio data.
+- Secure authentication system for admin access.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologies Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Frontend:
+- React.js
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+
+### Backend:
+- Node.js
+- Express.js
+- Prisma
+- PostgreSQL
+
+### Deployment:
+- Vercel (Frontend and Dashboard)
+- Dokploy (Backend and Server Management)
+
+---
+
+## Setup Instructions
+
+### Frontend:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/md-ali-0/portfolio.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Dashboard:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/md-ali-0/portfolio-dashboard.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Backend:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/md-ali-0/portfolio-api.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure environment variables in a `.env` file.
+4. Run the development server:
+   ```bash
+   npm start
+   ```
+
+---
+
+## Contributing
+Contributions are welcome! Please fork the repositories and create a pull request with your proposed changes.
+
+---
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
