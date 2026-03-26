@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 
 interface DashNavbarProps {
@@ -41,60 +40,42 @@ const DashNavbar: FC<DashNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     };
 
     return (
-        <div className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 py-3 bg-white/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900/80 transition-colors">
+        <div
+            className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 py-3 transition-colors"
+            style={{ background: '#1c1c1e', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+        >
             <div className="flex items-center">
                 <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="text-gray-500 focus:outline-none lg:hidden"
+                    className="text-gray-400 focus:outline-none lg:hidden mr-4"
                 >
-                    <svg
-                        className="w-6 h-6"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M4 6H20M4 12H20M4 18H11"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
 
                 <div className="relative">
                     <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-                        <Search className="shrink-0 size-4 text-gray-400 dark:text-white/60" />
+                        <Search className="shrink-0 size-4" style={{ color: '#636366' }} />
                     </div>
-                    <Input
+                    <input
                         type="text"
                         onChange={(e) => setSearch(e.target.value)}
                         value={search}
-                        className="py-2 ps-10 pe-16 block w-full rounded-lg text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                        placeholder="Search"
+                        className="py-2 ps-10 pe-16 block w-full rounded-lg text-sm outline-none transition-all"
+                        placeholder="Search..."
+                        style={{ background: '#2c2c2e', border: '1px solid rgba(255,255,255,0.1)', color: '#eeeeee' }}
                     />
                     {search ? (
                         <div className="absolute inset-y-0 end-0 flex items-center z-20 pe-1">
                             <button
                                 type="button"
                                 onClick={() => setSearch("")}
-                                className="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
+                                className="inline-flex shrink-0 justify-center items-center size-6 rounded-full transition-colors"
+                                style={{ color: '#636366' }}
                                 aria-label="Close"
                             >
-                                <span className="sr-only">Close</span>
-                                <svg
-                                    className="shrink-0 size-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
+                                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx={12} cy={12} r={10} />
                                     <path d="m15 9-6 6" />
                                     <path d="m9 9 6 6" />
@@ -102,16 +83,15 @@ const DashNavbar: FC<DashNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                             </button>
                         </div>
                     ) : (
-                        <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
-                            <Command className="shrink-0 size-3 text-gray-400 dark:text-white/60" />
-                            <span className="mx-1">
-                                <Plus className="shrink-0 size-3 text-gray-400 dark:text-white/60" />
-                            </span>
-                            <span className="text-xs">/</span>
+                        <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3">
+                            <Command className="shrink-0 size-3" style={{ color: '#636366' }} />
+                            <span className="mx-1"><Plus className="shrink-0 size-3" style={{ color: '#636366' }} /></span>
+                            <span className="text-xs" style={{ color: '#636366' }}>/</span>
                         </div>
                     )}
                 </div>
             </div>
+
             <div className="flex gap-3.5 items-center">
                 <div className="flex items-center">
                     <div className="relative">
@@ -125,41 +105,38 @@ const DashNavbar: FC<DashNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 </div>
                             ) : (
                                 <Avatar>
-                                    <AvatarImage
-                                        src={userData?.avatar as string}
-                                        alt={userData?.name}
-                                    />
-                                    <AvatarFallback>
+                                    <AvatarImage src={userData?.avatar as string} alt={userData?.name} />
+                                    <AvatarFallback style={{ background: '#3a3a3c', color: '#eeeeee' }}>
                                         {userData?.name.split("")[0]}
                                     </AvatarFallback>
                                 </Avatar>
                             )}
                         </button>
 
-                        <div
-                            onClick={() => setDropdownOpen(false)}
-                            className={`fixed inset-0 z-10 w-full h-full ${
-                                dropdownOpen ? "" : "hidden"
-                            }`}
-                        ></div>
+                        <div onClick={() => setDropdownOpen(false)} className={`fixed inset-0 z-10 w-full h-full ${dropdownOpen ? "" : "hidden"}`}></div>
 
                         <div
-                            className={`absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white dark:bg-muted rounded-md shadow-xl ${
-                                dropdownOpen ? "" : "hidden"
-                            }`}
+                            className={`absolute right-0 z-10 w-48 mt-2 overflow-hidden rounded-xl shadow-2xl ${dropdownOpen ? "" : "hidden"}`}
+                            style={{ background: '#2c2c2e', border: '1px solid rgba(255,255,255,0.1)' }}
                         >
                             <Link
                                 href="/dashboard/personal-information"
-                                className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-[#0C1427] dark:hover:bg-slate-600 hover:text-white"
+                                className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                                style={{ color: '#aeaeb2' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#fff'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.color = '#aeaeb2'; }}
                             >
-                                <LucideUserCircle size={18} />
+                                <LucideUserCircle size={16} />
                                 <span>Profile</span>
                             </Link>
                             <div
                                 onClick={handleLogout}
-                                className="flex items-center gap-2 px-4 cursor-pointer py-2 text-sm hover:bg-[#0C1427] dark:hover:bg-slate-600 hover:text-white"
+                                className="flex items-center gap-2 px-4 cursor-pointer py-2.5 text-sm transition-colors"
+                                style={{ color: '#aeaeb2', borderTop: '1px solid rgba(255,255,255,0.06)' }}
+                                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = ''; (e.currentTarget as HTMLElement).style.color = '#aeaeb2'; }}
                             >
-                                <LucideLogOut size={18} />
+                                <LucideLogOut size={16} />
                                 Logout
                             </div>
                         </div>
