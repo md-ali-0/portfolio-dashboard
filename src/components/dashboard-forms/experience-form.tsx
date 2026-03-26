@@ -29,8 +29,8 @@ type ExperienceFormValues = {
     position: string;
     description: string;
     icon?: string;
-    startDate: string;
-    endDate?: string;
+    startDate: Date | null;
+    endDate?: Date | null;
     achievements: { value: string }[];
     technologies: { value: string }[];
 };
@@ -42,8 +42,8 @@ export default function ExperienceForm() {
             position: "",
             description: "",
             icon: "",
-            startDate: "",
-            endDate: "",
+            startDate: null,
+            endDate: null,
             achievements: [{ value: "" }],
             technologies: [{ value: "" }],
         },
@@ -86,15 +86,20 @@ export default function ExperienceForm() {
     }, [isError, isSuccess, error, reset]);
 
     const onSubmit = async (data: ExperienceFormValues) => {
+        if (!session?.user) {
+            toast.error("You must be logged in to create an experience");
+            return;
+        }
+
         const loadingToast = toast.loading("Experience is Creating...");
         const experienceData = {
             companyName: data.companyName,
             position: data.position,
             description: data.description,
             icon: data.icon,
-            startDate: data.startDate,
-            userId: session?.user,
-            endDate: data.endDate || null,
+            startDate: data.startDate instanceof Date ? data.startDate.toISOString() : data.startDate,
+            userId: String(session.user),
+            endDate: data.endDate instanceof Date ? data.endDate.toISOString() : (data.endDate || null),
             achievements: data.achievements.map(a => a.value).filter(val => val.trim() !== ""),
             technologies: data.technologies.map(t => t.value).filter(val => val.trim() !== ""),
         };
@@ -281,7 +286,8 @@ export default function ExperienceForm() {
                                     <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
-                                            onSelect={field.onChange}
+                                            selected={field.value as Date}
+                                            onSelect={(date) => field.onChange(date)}
                                             disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                                             initialFocus
                                         />
@@ -315,7 +321,8 @@ export default function ExperienceForm() {
                                     <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
-                                            onSelect={field.onChange}
+                                            selected={field.value as Date}
+                                            onSelect={(date) => field.onChange(date)}
                                             disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                                             initialFocus
                                         />

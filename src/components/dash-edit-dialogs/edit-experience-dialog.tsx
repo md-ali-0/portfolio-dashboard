@@ -108,7 +108,7 @@ const EditExperienceDialog = ({
                 technologies: experience.technologies?.length 
                     ? experience.technologies.map(val => ({ value: val })) 
                     : [{ value: "" }],
-            } as any);
+            }, { keepDefaultValues: true });
         }
     }, [experience, reset]);
 
@@ -116,6 +116,8 @@ const EditExperienceDialog = ({
         const loadingToast = toast.loading("Experience is Updating...");
         const formattedData = {
             ...data,
+            startDate: data.startDate instanceof Date ? data.startDate.toISOString() : data.startDate,
+            endDate: data.endDate instanceof Date ? data.endDate.toISOString() : (data.endDate || null),
             achievements: data.achievements.map(a => a.value).filter(val => val.trim() !== ""),
             technologies: data.technologies.map(t => t.value).filter(val => val.trim() !== ""),
         };

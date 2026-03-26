@@ -1,5 +1,5 @@
 export type TSession  = {
     isAuth: boolean;
-    user: number | null
+    user: string | null
     role: 'superAdmin' | 'admin' | 'user' | 'guest'
 }

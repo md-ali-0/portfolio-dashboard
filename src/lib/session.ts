@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import "server-only";
 
 export interface DecryptedSession {
-    user: number | null;
+    user: string | null;
     role: "user" | "superAdmin" | "admin" | "guest";
     iat: number;
     exp: number;
@@ -31,7 +31,7 @@ export async function getSession(): Promise<TSession> {
     if (cookie) {
         const session = await decrypt(cookie);
         if (session?.user) {
-            return { isAuth: true, user: session.user, role: session.role };
+            return { isAuth: true, user: String(session.user), role: session.role };
         }
     }
 
