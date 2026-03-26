@@ -313,7 +313,8 @@ const EditExperienceDialog = ({
                                                 <PopoverContent className="w-auto p-0" align="start">
                                                     <Calendar
                                                         mode="single"
-                                                        onSelect={field.onChange}
+                                                        selected={field.value as Date}
+                                                        onSelect={(date) => field.onChange(date)}
                                                         disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                                                         initialFocus
                                                     />
@@ -347,7 +348,8 @@ const EditExperienceDialog = ({
                                                 <PopoverContent className="w-auto p-0" align="start">
                                                     <Calendar
                                                         mode="single"
-                                                        onSelect={field.onChange}
+                                                        selected={field.value as Date}
+                                                        onSelect={(date) => field.onChange(date)}
                                                         disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                                                         initialFocus
                                                     />
