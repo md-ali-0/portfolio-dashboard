@@ -4,14 +4,14 @@ const aboutMeApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAboutMe: builder.query({
             query: () => ({
-                url: `/about`,
+                url: `/about-me`,
             }),
             providesTags: ["aboutMe"],
         }),
 
         updateAboutMe: builder.mutation({
             query: (data) => ({
-                url: `/about`,
+                url: `/about-me`,
                 method: "PATCH",
                 body: data,
             }),
