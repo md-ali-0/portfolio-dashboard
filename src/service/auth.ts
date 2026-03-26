@@ -1,6 +1,7 @@
 "use server";
 
 import {
+    changePassword,
     resetPassword,
     sendPasswordResetEmail,
     verifyCredentials
@@ -58,11 +59,12 @@ export async function forgotPassword(formData: FormData) {
     const result = await sendPasswordResetEmail(email);
 
     return {
+        success: result.success,
         message: result.message,
     };
 }
 
-export async function resetPasswordAction(formData: FormData) {
+export async function resetPasswordAction(formData: FormData, token: string) {
     const rawFormData = Object.fromEntries(formData.entries());
     const validatedFields = resetPasswordSchema.safeParse(rawFormData);
 
@@ -73,9 +75,18 @@ export async function resetPasswordAction(formData: FormData) {
     }
 
     const { password } = validatedFields.data;
-    const result = await resetPassword(password);
+    const result = await resetPassword(password, token);
 
     return {
+        success: result.success,
+        message: result.message,
+    };
+}
+
+export async function changePasswordAction(data: { oldPassword: string, newPassword: string }) {
+    const result = await changePassword(data);
+    return {
+        success: result.success,
         message: result.message,
     };
 }

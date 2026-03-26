@@ -5,7 +5,7 @@ import { LoginFormData } from "./auth-validation";
 
 export async function verifyCredentials(credentials: LoginFormData) {
     try {
-        const res = await fetch(`${config.host}/api/auth/signin`, {
+        const res = await fetch(`${config.host}/api/v1/auth/signin`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export async function verifyCredentials(credentials: LoginFormData) {
         if (result?.success)
             cookies().set("session", result?.data, {
                 httpOnly: true,
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
                 path: "/",
                 sameSite: "strict",
                 expires: expiresAt,
@@ -49,19 +49,81 @@ export async function verifyCredentials(credentials: LoginFormData) {
 export async function sendPasswordResetEmail(
     email: string
 ): Promise<{ success: boolean; message: string }> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+        const res = await fetch(`${config.host}/api/v1/auth/forget-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+        });
 
-    return {
-        success: true,
-        message:
-            "If an account exists for that email, we have sent a password reset link",
-    };
+        const result = await res.json();
+
+        return {
+            success: result.success,
+            message: result.message || "Request failed",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Something went wrong. Please try again.",
+        };
+    }
 }
 
 export async function resetPassword(
-    password: string
+    password: string,
+    token: string
 ): Promise<{ success: boolean; message: string }> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+        const res = await fetch(`${config.host}/api/v1/auth/reset-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({ password }),
+        });
 
-    return { success: true, message: "Password reset successfully" };
+        const result = await res.json();
+
+        return {
+            success: result.success,
+            message: result.message || "Reset failed",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Something went wrong. Please try again.",
+        };
+    }
+}
+
+export async function changePassword(
+    payload: { oldPassword: string, newPassword: string }
+): Promise<{ success: boolean; message: string }> {
+    try {
+        const session = cookies().get("session")?.value;
+        const res = await fetch(`${config.host}/api/v1/auth/change-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": session || ""
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+
+        return {
+            success: result.success,
+            message: result.message || "Password change failed",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Something went wrong. Please try again.",
+        };
+    }
 }
