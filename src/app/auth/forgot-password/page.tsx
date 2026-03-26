@@ -3,11 +3,9 @@ import { FC } from "react";
 
 const ForgotPassword: FC = () => {
     return (
-        <div className="bg-gray-50">
-            <div className="min-h-screen flex flex-col items-center justify-center py-5 px-4">
-                <div className="max-w-md w-full">
-                    <ForgetPassowrdForm />
-                </div>
+        <div className="dark min-h-screen flex flex-col items-center justify-center py-5 px-4" style={{ background: '#111113' }}>
+            <div className="relative max-w-md w-full">
+                <ForgetPassowrdForm />
             </div>
         </div>
     );
