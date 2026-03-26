@@ -15,9 +15,6 @@ export async function verifyCredentials(credentials: LoginFormData) {
 
         const result = await res.json();
 
-        console.log(result);
-        
-
         if (!result?.success) {
             return {
                 success: false,

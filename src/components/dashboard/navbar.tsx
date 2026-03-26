@@ -14,6 +14,7 @@ import { Dispatch, FC, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import { getImageUrl } from "@/lib/utils";
 
 interface DashNavbarProps {
     sidebarOpen: boolean;
@@ -105,7 +106,7 @@ const DashNavbar: FC<DashNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 </div>
                             ) : (
                                 <Avatar>
-                                    <AvatarImage src={userData?.avatar as string} alt={userData?.name} />
+                                    <AvatarImage src={getImageUrl(userData?.avatar)} alt={userData?.name} />
                                     <AvatarFallback style={{ background: '#3a3a3c', color: '#eeeeee' }}>
                                         {userData?.name.split("")[0]}
                                     </AvatarFallback>

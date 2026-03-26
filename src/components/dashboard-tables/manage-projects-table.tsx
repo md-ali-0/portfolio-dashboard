@@ -20,6 +20,7 @@ import { useDeleteProjectMutation, useGetAllProjectsQuery } from "@/redux/featur
 import Link from "next/link";
 import { DataTable } from "../data-table/data-table";
 import DeleteDialog from "../shared/delete-dialog";
+import { getImageUrl } from "@/lib/utils";
 
 const ManageProjectTable: FC = () => {
     const [search, setSearch] = useState<string | undefined>(undefined);
@@ -62,7 +63,7 @@ const ManageProjectTable: FC = () => {
                 return (
                     <div className="rounded-md overflow-hidden w-16">
                         <Image
-                            src={`${row.original?.thumbnail}`}
+                            src={getImageUrl(row.original?.thumbnail)}
                             alt={row.original.title}
                             width={100}
                             height={100}

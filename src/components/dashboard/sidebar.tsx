@@ -27,7 +27,7 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             >
                 <div className="flex items-center justify-center border-b border-gray-800 py-3 h-16">
                     <Link href="/" className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
-                        ALI PORTFOLIO
+                        ALI
                     </Link>
                 </div>
                 <div className="overflow-y-auto custom-scroll">

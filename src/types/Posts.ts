@@ -1,7 +1,8 @@
 export type Post = {
     id: string;
     slug: string;
-    thumbnail: string;
+    thumbnail?: string;
+    featuredImage: string;
     title: string;
     shortDescription: string;
     authorId: string;
