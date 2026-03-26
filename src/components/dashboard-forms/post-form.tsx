@@ -93,13 +93,13 @@ export default function PostForm() {
         const reviewData = {
             title: data.title,
             slug: data.slug,
-            excerpt: data.excerpt,
+            excerpt: data.excerpt || "",
             categoryId: data.categoryId,
             authorId: session?.user,
             content: data.content,
-            metaTitle: data.metaTitle,
-            metaKey: data.metaKey,
-            metaDesc: data.metaDesc,
+            metaTitle: data.metaTitle || "",
+            metaKey: data.metaKey || "",
+            metaDesc: data.metaDesc || "",
         };
         const formData = new FormData();
         if (data.thumbnail) {
@@ -114,8 +114,11 @@ export default function PostForm() {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="max-w-5xl mx-auto">
+            <Form {...form}>
+                <form 
+                    onSubmit={form.handleSubmit(onSubmit)} 
+                >
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                         control={form.control}
@@ -325,7 +328,8 @@ export default function PostForm() {
                         {isLoading ? "Creating Post..." : "Create Post"}
                     </Button>
                 </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </div>
     );
 }

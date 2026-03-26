@@ -115,9 +115,20 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                 formData.append("images", image);
             });
         }
+        const sanitizedProjectData = {
+            ...projectData,
+            liveUrl: projectData.liveUrl || undefined,
+            SourceFront: projectData.SourceFront || undefined,
+            SourceBack: projectData.SourceBack || undefined,
+            metaTitle: projectData.metaTitle || undefined,
+            metaDesc: projectData.metaDesc || undefined,
+            metaKey: projectData.metaKey || undefined,
+            authorId: session?.user
+        };
+
         formData.append(
             "data",
-            JSON.stringify({ ...projectData, authorId: session?.user })
+            JSON.stringify(sanitizedProjectData)
         );
         const loadingToast = toast.loading("Project is Updating...");
         await updateProject({ data: formData, id: project?.id });
@@ -125,48 +136,51 @@ export default function EditProjectForm({ project }: EditProjectProps) {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                {/* Basic Information */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="title">Title</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="title"
-                                        placeholder="Enter Project Title"
-                                        {...field}
-                                        value={field.value ?? ""}
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="slug"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="slug">Slug</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="slug"
-                                        placeholder="Enter Project Slug"
-                                        {...field}
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </section>
+        <div className="max-w-5xl mx-auto">
+            <Form {...form}>
+                <form 
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
+                    {/* Basic Information */}
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="title">Title</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="title"
+                                            placeholder="Enter Project Title"
+                                            {...field}
+                                            value={field.value ?? ""}
+                                            required
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="slug"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="slug">Slug</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="slug"
+                                            placeholder="Enter Project Slug"
+                                            {...field}
+                                            required
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </section>
 
                 {/* Thumbnail and Live Url*/}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6 py-5">
@@ -507,7 +521,8 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                         {isLoading ? "Updating Post..." : "Update Post"}
                     </Button>
                 </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </div>
     );
 }

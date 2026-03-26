@@ -24,9 +24,9 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                         ? "translate-x-0 ease-out"
                         : "-translate-x-full ease-in"
                 }`}
-                style={{ background: '#000000', borderRight: '1px solid rgba(255,255,255,0.05)' }}
+                style={{ background: '#1c1c1e', borderRight: '1px solid rgba(255,255,255,0.08)' }}
             >
-                <div className="flex items-center justify-center py-3 h-16" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="flex items-center justify-center py-3 h-16" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                     <Link href="/" className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
                         ALI
                     </Link>

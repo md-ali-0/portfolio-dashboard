@@ -24,25 +24,28 @@ const StatisticsCard = ({
     color?: string;
 }) => {
     return (
-        <div className="group bg-[#1c1c1e] border border-white/5 rounded-2xl p-6 transition-all hover:bg-[#242426] hover:border-white/10">
-            <div className="mb-6">
-                <Icon className={`w-3.5 h-3.5 ${color || "text-yellow-500/80"}`} />
+        <div className="group bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6 transition-all hover:bg-[#242426] hover:border-white/10 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
+                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+                    <Icon className={`w-4 h-4 ${color || "text-yellow-500/80"}`} />
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40 animate-pulse" />
             </div>
             
             <div className="space-y-1">
                 {isLoading ? (
                     <div className="h-10 w-24 bg-white/5 rounded animate-pulse" />
                 ) : (
-                    <h3 className="text-4xl font-black text-white tracking-tighter">
+                    <h3 className="text-4xl font-bold text-white tracking-tighter">
                         {count ?? 0}
                     </h3>
                 )}
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8e8e93]">
                         {title}
                     </span>
                     {subLabel && (
-                        <span className="text-[10px] font-medium text-muted-foreground/30 mt-0.5">
+                        <span className="text-[10px] font-medium text-[#636366] mt-0.5">
                             {subLabel}
                         </span>
                     )}

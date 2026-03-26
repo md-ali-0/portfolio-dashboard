@@ -38,6 +38,9 @@ export default function EditPostForm({post}: EditPostProps) {
     const initialPostData = post ? {
         ...post,
         excerpt: post.excerpt || "",
+        metaTitle: post.metaTitle || "",
+        metaKey: post.metaKey || "",
+        metaDesc: post.metaDesc || "",
     } : undefined;
 
     const form = useForm<Post>({
@@ -113,11 +116,11 @@ export default function EditPostForm({post}: EditPostProps) {
             title: data.title,
             slug: data.slug,
             content:  data.content,
-            excerpt: data.excerpt, 
+            excerpt: data.excerpt || undefined, 
             categoryId: data.categoryId,
-            metaTitle: data.metaTitle,
-            metaKey: data.metaKey,
-            metaDesc: data.metaDesc,
+            metaTitle: data.metaTitle || undefined,
+            metaKey: data.metaKey || undefined,
+            metaDesc: data.metaDesc || undefined,
         };
 
         if ((data.thumbnail as any) instanceof File) {
@@ -132,8 +135,11 @@ export default function EditPostForm({post}: EditPostProps) {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="max-w-5xl mx-auto">
+            <Form {...form}>
+                <form 
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                         control={form.control}
@@ -344,7 +350,8 @@ export default function EditPostForm({post}: EditPostProps) {
                         {isLoading ? "Updating Post..." : "Update Post"}
                     </Button>
                 </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </div>
     );
 }

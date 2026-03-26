@@ -104,9 +104,20 @@ export default function ProjectForm() {
                 formData.append("images", image);
             });
         }
+        const sanitizedProjectData = {
+            ...projectData,
+            liveUrl: projectData.liveUrl || undefined,
+            SourceFront: projectData.SourceFront || undefined,
+            SourceBack: projectData.SourceBack || undefined,
+            metaTitle: projectData.metaTitle || undefined,
+            metaDesc: projectData.metaDesc || undefined,
+            metaKey: projectData.metaKey || undefined,
+            authorId: session?.user
+        };
+
         formData.append(
             "data",
-            JSON.stringify({ ...projectData, authorId: session?.user })
+            JSON.stringify(sanitizedProjectData)
         );
         const loadingToast = toast.loading("Project is Creating...");
         await addProject(formData);
@@ -114,47 +125,54 @@ export default function ProjectForm() {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                {/* Basic Information */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="title">Title</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="title"
-                                        placeholder="Enter Project Title"
-                                        {...field}
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="slug"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="slug">Slug</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="slug"
-                                        placeholder="Enter Project Slug"
-                                        {...field}
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </section>
+        <div className="max-w-5xl mx-auto">
+            <Form {...form}>
+                <form 
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
+                    {/* Basic Information */}
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="title">Title</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="title"
+                                            placeholder="Enter Project Title"
+                                            {...field}
+                                            required
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="slug"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="slug">Slug</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            id="slug"
+                                            placeholder="Enter Project Slug"
+                                            {...field}
+                                            required
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </section>
+                    {/* ... (rest of the form sections) */}
+                    {/* Note: I'm skipping truncated middle lines for brevity in replacement, but I must follow instructions */}
+                    {/* I'll use a better approach to replace the whole return block if possible, but the file is large */}
+                    {/* Let's try to just replace the header and footer of the return statement */}
 
                 {/* Thumbnail and Live Url*/}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6 py-5">
@@ -486,7 +504,8 @@ export default function ProjectForm() {
                         {isLoading ? "Creating Project..." : "Create Project"}
                     </Button>
                 </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </div>
     );
 }
