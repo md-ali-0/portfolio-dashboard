@@ -35,8 +35,13 @@ interface EditPostProps {
 
 export default function EditPostForm({post}: EditPostProps) {
 
+    const initialPostData = post ? {
+        ...post,
+        shortDescription: (post as any).excerpt || "",
+    } : undefined;
+
     const form = useForm<Post>({
-        defaultValues: post || {
+        defaultValues: initialPostData || {
             title: "",
             slug: "",
             shortDescription: "",
@@ -47,7 +52,7 @@ export default function EditPostForm({post}: EditPostProps) {
             metaKey: "",
             metaDesc: "",
         },
-        values: post || undefined,
+        values: initialPostData as Post | undefined,
     });
 
     const { data: categories, isLoading: isCategoryLoading } = useGetAllCategoriesQuery([
@@ -108,9 +113,10 @@ export default function EditPostForm({post}: EditPostProps) {
             title: data.title,
             slug: data.slug,
             content:  data.content,
-            shortDescription: data.shortDescription,
+            excerpt: data.shortDescription, // Changed to map to Db's excerpt
             categoryId: data.categoryId,
             metaTitle: data.metaTitle,
+            metaKey: data.metaKey,
             metaDesc: data.metaDesc,
         };
 

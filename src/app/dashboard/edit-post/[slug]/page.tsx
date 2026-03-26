@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 
 export default async function EditPostPage( { params : {slug}} : {params: {slug: string}}) {
 
-    const result = await fetch(`${config.host}/api/post/${slug}`, {
+    const result = await fetch(`${config.host}/api/v1/post/${slug}`, {
         cache: "no-store"
     })
     const post = await result.json()
