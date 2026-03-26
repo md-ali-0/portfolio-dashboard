@@ -19,10 +19,10 @@ export default async function EditPostPage( { params : {slug}} : {params: {slug:
     return (
         <div>
             <Breadcrumb />
-            <div className="rounded-sm border bg-white dark:bg-gray-900 mt-5">
-                <div className="flex justify-between items-center border-b px-7 py-4">
-                    <h3 className="font-medium text-black dark:text-white">
-                        Create New Post
+            <div className="rounded-xl border border-border bg-card mt-5 shadow-sm overflow-hidden">
+                <div className="flex justify-between items-center border-b border-border px-7 py-4">
+                    <h3 className="font-semibold text-foreground">
+                        Edit Post
                     </h3>
                     <Button asChild variant={"default"} size={"sm"}>
                         <Link href={"/dashboard/posts"}>Manage Posts</Link>

@@ -258,12 +258,11 @@ export default function PostForm() {
                                             toolbar:
                                                 "undo redo | bold italic underline strikethrough | image | link | code table mergetags | addcomment showcomments |  typography | align lineheight | checklist numlist bullist indent outdent | charmap | removeformat",
                                             images_upload_url: "/api/upload",
-                                            content_style:
-                                                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                                             branding: false,
-                                            skin_url: "/tinymce/skins/ui/oxide",
-                                            content_css:
-                                                "/tinymce/skins/content/default/content.min.css",
+                                            skin: "oxide-dark",
+                                            content_css: "dark",
+                                            content_style:
+                                                "body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:14px; background-color: #1c1c1e; color: #eeeeee; }",
                                         }}
                                         onEditorChange={(content) =>
                                             field.onChange(content)

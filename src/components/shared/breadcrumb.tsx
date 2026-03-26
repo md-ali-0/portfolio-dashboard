@@ -9,7 +9,7 @@ const Breadcrumb = () => {
     const pathnames = pathname.split("/").filter((x) => x);
 
     return (
-        <nav className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+        <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
             {pathnames.map((value, index) => {
                 const currentPath = `/${pathnames
                     .slice(0, index + 1)
@@ -19,7 +19,7 @@ const Breadcrumb = () => {
                 return isLast ? (
                     <span key={index} className="flex items-center space-x-2">
                         <span>/</span>
-                        <span className="capitalize">
+                        <span className="capitalize text-foreground font-medium">
                             {value.replace(/-/g, " ")}
                         </span>
                     </span>
@@ -28,7 +28,7 @@ const Breadcrumb = () => {
                         {currentPath !== "/dashboard" && <span>/</span>}
                         <Link
                             href={currentPath}
-                            className="text-slate-950 dark:text-gray-100 capitalize hover:underline"
+                            className="capitalize hover:text-foreground transition-colors"
                         >
                             {value.replace(/-/g, " ")}
                         </Link>

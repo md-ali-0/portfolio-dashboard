@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                     <DataTableSkeleton />
                 ) : (
                     <Table>
-                        <TableHeader className="bg-slate-100 dark:bg-slate-800">
+                        <TableHeader className="bg-secondary">
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => {

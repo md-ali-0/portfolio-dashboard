@@ -7,9 +7,9 @@ export default async function CreateExperiencePage() {
     return (
         <div>
             <Breadcrumb />
-            <div className="rounded-sm border bg-white dark:bg-gray-900 mt-5">
-                <div className="flex justify-between items-center border-b px-7 py-4">
-                    <h3 className="font-medium text-black dark:text-white">
+            <div className="rounded-xl border border-border bg-card mt-5 shadow-sm overflow-hidden">
+                <div className="flex justify-between items-center border-b border-border px-7 py-4">
+                    <h3 className="font-semibold text-foreground">
                         Create New Experience
                     </h3>
                     <Button asChild variant={"default"} size={"sm"}>
@@ -23,3 +23,4 @@ export default async function CreateExperiencePage() {
         </div>
     );
 }
+
