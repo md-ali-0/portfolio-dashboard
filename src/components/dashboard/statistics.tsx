@@ -1,12 +1,11 @@
 "use client";
 
 import { useGetAnalyticsOverviewQuery } from "@/redux/features/analytics/analyticsApi";
-import { 
-    Brain, ChartBarStacked, Rss, SquareChartGantt, 
+import {
+    Brain, ChartBarStacked, Rss, SquareChartGantt,
     Zap
 } from "lucide-react";
 import React from "react";
-import DashboardHeader from "./dashboard-header";
 
 const StatisticsCard = ({
     title,
@@ -61,8 +60,6 @@ export default function Statistics() {
 
     return (
         <div className="max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
-            <DashboardHeader />
-
             {/* Top Stats Row */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                 <StatisticsCard
