@@ -340,7 +340,7 @@ const EditExperienceDialog = ({
                                                                 !field.value && "text-muted-foreground"
                                                             )}
                                                         >
-                                                            {field.value ? formatDate(field.value as unknown as string) : <span>Pick a date</span>}
+                                                            {field.value ? formatDate(field.value) : <span>Pick a date</span>}
                                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                         </Button>
                                                     </FormControl>
