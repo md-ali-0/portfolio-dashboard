@@ -46,7 +46,7 @@ const EditPostDialog = ({ post, open, onClose }: EditPostDialogProps) => {
         defaultValues: post || {
             title: "",
             slug: "",
-            shortDescription: "",
+            excerpt: "",
             thumbnail: "",
             categoryId: "",
             authorId: "",
@@ -95,7 +95,7 @@ const EditPostDialog = ({ post, open, onClose }: EditPostDialogProps) => {
                 post || {
                     title: "",
                     slug: "",
-                    shortDescription: "",
+                    excerpt: "",
                     thumbnail: "",
                     categoryId: "",
                     authorId: "",
@@ -115,14 +115,14 @@ const EditPostDialog = ({ post, open, onClose }: EditPostDialogProps) => {
             title: data.title,
             slug: data.slug,
             content:  data.content,
-            shortDescription: data.shortDescription,
+            excerpt: data.excerpt,
             categoryId: data.categoryId,
             metaTitle: data.metaTitle,
             metaDesc: data.metaDesc,
         };
 
         if ((data.thumbnail as any) instanceof File) {
-            formData.append("thumbnail", data.thumbnail);
+            formData.append("thumbnail", data.thumbnail as File);
         }
 
         formData.append("data", JSON.stringify(productData));
@@ -258,7 +258,7 @@ const EditPostDialog = ({ post, open, onClose }: EditPostDialogProps) => {
                             />
                             <FormField
                                 control={form.control}
-                                name="shortDescription"
+                                name="excerpt"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
                                         <FormLabel>Short Description</FormLabel>

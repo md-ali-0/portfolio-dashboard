@@ -19,13 +19,14 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                 }`}
             ></div>
             <div
-                className={`fixed inset-y-0 left-0 z-30 w-64 flex flex-col bg-gray-900 border-r border-gray-800 min-h-screen transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0 ${
+                className={`fixed inset-y-0 left-0 z-30 w-64 flex flex-col min-h-screen transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0 ${
                     sidebarOpen
                         ? "translate-x-0 ease-out"
                         : "-translate-x-full ease-in"
                 }`}
+                style={{ background: '#000000', borderRight: '1px solid rgba(255,255,255,0.05)' }}
             >
-                <div className="flex items-center justify-center border-b border-gray-800 py-3 h-16">
+                <div className="flex items-center justify-center py-3 h-16" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <Link href="/" className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
                         ALI
                     </Link>

@@ -37,14 +37,14 @@ export default function EditPostForm({post}: EditPostProps) {
 
     const initialPostData = post ? {
         ...post,
-        shortDescription: (post as any).excerpt || "",
+        excerpt: post.excerpt || "",
     } : undefined;
 
     const form = useForm<Post>({
         defaultValues: initialPostData || {
             title: "",
             slug: "",
-            shortDescription: "",
+            excerpt: "",
             thumbnail: "",
             categoryId: "",
             authorId: "",
@@ -93,7 +93,7 @@ export default function EditPostForm({post}: EditPostProps) {
                 post || {
                     title: "",
                     slug: "",
-                    shortDescription: "",
+                    excerpt: "",
                     thumbnail: "",
                     categoryId: "",
                     authorId: "",
@@ -113,7 +113,7 @@ export default function EditPostForm({post}: EditPostProps) {
             title: data.title,
             slug: data.slug,
             content:  data.content,
-            excerpt: data.shortDescription, // Changed to map to Db's excerpt
+            excerpt: data.excerpt, 
             categoryId: data.categoryId,
             metaTitle: data.metaTitle,
             metaKey: data.metaKey,
@@ -121,7 +121,7 @@ export default function EditPostForm({post}: EditPostProps) {
         };
 
         if ((data.thumbnail as any) instanceof File) {
-            formData.append("thumbnail", data.thumbnail);
+            formData.append("thumbnail", data.thumbnail as File);
         }
 
         formData.append("data", JSON.stringify(productData));
@@ -233,7 +233,7 @@ export default function EditPostForm({post}: EditPostProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="shortDescription"
+                        name="excerpt"
                         render={({ field }) => (
                             <FormItem className="col-span-2">
                                 <FormLabel>Short Description</FormLabel>

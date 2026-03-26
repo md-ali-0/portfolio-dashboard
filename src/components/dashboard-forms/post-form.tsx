@@ -32,10 +32,11 @@ import {
 type PostFormValues = {
     title: string;
     slug: string;
-    shortDescription: string;
+    excerpt: string;
     content: string;
     thumbnail: File | null;
     categoryId: string;
+    authorId: string;
     metaTitle: string;
     metaKey: string;
     metaDesc: string;
@@ -47,7 +48,7 @@ export default function PostForm() {
         defaultValues: {
             title: "",
             slug: "",
-            shortDescription: "",
+            excerpt: "",
             content: "",
             thumbnail: null,
             categoryId: "",
@@ -92,7 +93,7 @@ export default function PostForm() {
         const reviewData = {
             title: data.title,
             slug: data.slug,
-            excerpt: data.shortDescription,
+            excerpt: data.excerpt,
             categoryId: data.categoryId,
             authorId: session?.user,
             content: data.content,
@@ -214,7 +215,7 @@ export default function PostForm() {
                     />
                     <FormField
                         control={form.control}
-                        name="shortDescription"
+                        name="excerpt"
                         render={({ field }) => (
                             <FormItem className="col-span-2">
                                 <FormLabel>Short Description</FormLabel>

@@ -63,7 +63,7 @@ const ManagePostTable: FC = () => {
                 return (
                     <div className="rounded-md overflow-hidden w-16">
                         <Image
-                            src={getImageUrl(row.original?.featuredImage || row.original?.thumbnail)}
+                            src={getImageUrl(row.original?.featuredImage || (row.original?.thumbnail as string))}
                             alt={row.original.title}
                             width={100}
                             height={100}

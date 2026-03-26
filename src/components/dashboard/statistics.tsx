@@ -7,8 +7,6 @@ import {
 } from "lucide-react";
 import React from "react";
 import DashboardHeader from "./dashboard-header";
-import MetricCard from "./metric-card";
-import SimpleLineChart from "./simple-line-chart";
 
 const StatisticsCard = ({
     title,
@@ -58,27 +56,6 @@ export default function Statistics() {
     const { data: analyticsData, isLoading } = useGetAnalyticsOverviewQuery(undefined);
     const stats = analyticsData?.data;
 
-    // Simulated trend data
-    const growthData = [
-        { label: "Feb 20", value: 1200000 },
-        { label: "Feb 24", value: 2100000 },
-        { label: "Feb 28", value: 3800000 },
-        { label: "Mar 04", value: 4500000 },
-        { label: "Mar 08", value: 5200000 },
-        { label: "Mar 12", value: 6800000 },
-        { label: "Mar 16", value: 7300000 },
-    ];
-
-    const engagementData = [
-        { label: "Feb 20", value: 65 },
-        { label: "Feb 24", value: 78 },
-        { label: "Feb 28", value: 82 },
-        { label: "Mar 04", value: 74 },
-        { label: "Mar 08", value: 86 },
-        { label: "Mar 12", value: 81 },
-        { label: "Mar 16", value: 83 },
-    ];
-
     return (
         <div className="max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
             <DashboardHeader />
@@ -125,52 +102,6 @@ export default function Statistics() {
                     isLoading={isLoading}
                     color="text-yellow-400"
                 />
-            </div>
-
-            {/* Middle Detailed Stats Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <MetricCard 
-                    title="CONTENT METRICS"
-                    progress={86}
-                    progressColor="indigo"
-                    metrics={[
-                        { label: "TOTAL CALLS", value: "4,827", subValue: "8 MCP • 14 Hook" },
-                        { label: "SAVINGS RATE", value: "86%", color: "indigo" },
-                        { label: "TOKENS SAVED", value: "4.3M" },
-                        { label: "COST SAVED", value: "$64.54", color: "yellow" }
-                    ]}
-                />
-                <MetricCard 
-                    title="USER ENGAGEMENT"
-                    progress={72}
-                    progressColor="blue"
-                    metrics={[
-                        { label: "AVG SESSIONS", value: "1,288", subValue: "Daily active users" },
-                        { label: "RETENTION", value: "72%", color: "blue" },
-                        { label: "SHARES", value: stats?.totalShares || 0 },
-                        { label: "COMMENTS", value: stats?.comments || 0, color: "emerald" }
-                    ]}
-                />
-            </div>
-
-            {/* Bottom Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2">
-                    <SimpleLineChart 
-                        title="CUMULATIVE VIEW GROWTH"
-                        data={growthData}
-                        color="#10b981"
-                        height={240}
-                    />
-                </div>
-                <div>
-                    <SimpleLineChart 
-                        title="DAILY ENGAGEMENT RATE"
-                        data={engagementData}
-                        color="#6366f1"
-                        height={240}
-                    />
-                </div>
             </div>
         </div>
     );

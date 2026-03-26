@@ -1,10 +1,10 @@
 export type Post = {
     id: string;
     slug: string;
-    thumbnail?: string;
+    thumbnail?: string | File | null;
     featuredImage: string;
     title: string;
-    shortDescription: string;
+    excerpt: string;
     authorId: string;
     categoryId: string;
     content: string;
