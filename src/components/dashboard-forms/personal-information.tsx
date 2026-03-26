@@ -20,17 +20,17 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 type AboutMeFormValues = {
-    cvUrl: string;
-    shortDescription: string;
-    aboutMe: string;
+    resume: string;
+    title: string;
+    description: string;
 };
 
 export default function AboutMeForm() {
     const form = useForm<AboutMeFormValues>({
         defaultValues: {
-            cvUrl: "",
-            shortDescription: "",
-            aboutMe: "",
+            resume: "",
+            title: "",
+            description: "",
         },
     });
 
@@ -42,7 +42,13 @@ export default function AboutMeForm() {
 
     useEffect(() => {
         if (aboutMeData?.data) {
-            reset(aboutMeData?.data);
+            // We only need resume, title, description
+            const { resume, title, description } = aboutMeData.data;
+            reset({
+                resume: resume || "",
+                title: title || "",
+                description: description || ""
+            });
         }
     }, [aboutMeData?.data, reset]);
 
@@ -64,16 +70,16 @@ export default function AboutMeForm() {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <section className="grid grid-cols-1 gap-6">
-                    {/* CV URL */}
+                    {/* CV URL (mapped to Resume) */}
                     <FormField
                         control={form.control}
-                        name="cvUrl"
+                        name="resume"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="cvUrl">CV URL</FormLabel>
+                                <FormLabel htmlFor="resume">CV URL (Resume)</FormLabel>
                                 <FormControl>
                                     <Input
-                                        id="cvUrl"
+                                        id="resume"
                                         placeholder="Enter CV URL"
                                         {...field}
                                         required
@@ -84,18 +90,18 @@ export default function AboutMeForm() {
                         )}
                     />
 
-                    {/* Short Description */}
+                    {/* Short Description (mapped to title) */}
                     <FormField
                         control={form.control}
-                        name="shortDescription"
+                        name="title"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="shortDescription">
-                                    Short Description
+                                <FormLabel htmlFor="title">
+                                    Short Description (Title)
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        id="shortDescription"
+                                        id="title"
                                         placeholder="Enter a short description"
                                         {...field}
                                         required
@@ -107,15 +113,16 @@ export default function AboutMeForm() {
                         )}
                     />
                     
+                    {/* About Me (mapped to description) */}
                     <FormField
                         control={form.control}
-                        name="aboutMe"
+                        name="description"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="aboutMe">About Me</FormLabel>
+                                <FormLabel htmlFor="description">About Me (Description)</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        id="aboutMe"
+                                        id="description"
                                         placeholder="Write about yourself"
                                         {...field}
                                         required

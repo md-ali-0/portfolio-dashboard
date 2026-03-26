@@ -92,7 +92,7 @@ export default function PostForm() {
         const reviewData = {
             title: data.title,
             slug: data.slug,
-            shortDescription: data.shortDescription,
+            excerpt: data.shortDescription,
             categoryId: data.categoryId,
             authorId: session?.user,
             content: data.content,
