@@ -103,6 +103,14 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
+                            <SideBarMenuItem
+                                menu={{
+                                    name: "Comments",
+                                    icon: "MessageSquare",
+                                    path: "/dashboard/comments",
+                                }}
+                                setSidebarOpen={setSidebarOpen}
+                            />
                             <h4 className="text-gray-400 font-semibold text-xs mt-2">
                                 About Me
                             </h4>

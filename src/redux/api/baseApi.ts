@@ -27,5 +27,6 @@ export const baseApi = createApi({
         "aboutMe",
         "users",
         "userData",
+        "comments",
     ],
 });

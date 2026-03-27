@@ -1,4 +1,5 @@
 export * from './Category';
+export * from './Comment';
 export * from './Experience';
 export * from './global';
 export * from './Language';
