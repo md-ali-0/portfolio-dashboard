@@ -28,5 +28,6 @@ export const baseApi = createApi({
         "users",
         "userData",
         "comments",
+        "messages",
     ],
 });

@@ -111,6 +111,14 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
+                            <SideBarMenuItem
+                                menu={{
+                                    name: "Messages",
+                                    icon: "Mail",
+                                    path: "/dashboard/messages",
+                                }}
+                                setSidebarOpen={setSidebarOpen}
+                            />
                             <h4 className="text-gray-400 font-semibold text-xs mt-2">
                                 About Me
                             </h4>
