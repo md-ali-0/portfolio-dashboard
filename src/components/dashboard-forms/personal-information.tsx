@@ -23,6 +23,15 @@ type AboutMeFormValues = {
     resume: string;
     title: string;
     description: string;
+    email: string;
+    phone: string;
+    location: string;
+    github: string;
+    linkedin: string;
+    facebook: string;
+    twitter: string;
+    youtube: string;
+    instagram: string;
 };
 
 export default function AboutMeForm() {
@@ -31,6 +40,15 @@ export default function AboutMeForm() {
             resume: "",
             title: "",
             description: "",
+            email: "",
+            phone: "",
+            location: "",
+            github: "",
+            linkedin: "",
+            facebook: "",
+            twitter: "",
+            youtube: "",
+            instagram: "",
         },
     });
 
@@ -43,11 +61,20 @@ export default function AboutMeForm() {
     useEffect(() => {
         if (aboutMeData?.data) {
             // We only need resume, title, description
-            const { resume, title, description } = aboutMeData.data;
+            const { resume, title, description, email, phone, location, github, linkedin, facebook, twitter, youtube, instagram } = aboutMeData.data;
             reset({
                 resume: resume || "",
                 title: title || "",
-                description: description || ""
+                description: description || "",
+                email: email || "",
+                phone: phone || "",
+                location: location || "",
+                github: github || "",
+                linkedin: linkedin || "",
+                facebook: facebook || "",
+                twitter: twitter || "",
+                youtube: youtube || "",
+                instagram: instagram || "",
             });
         }
     }, [aboutMeData?.data, reset]);
@@ -133,6 +160,71 @@ export default function AboutMeForm() {
                             </FormItem>
                         )}
                     />
+
+                    {/* Contact & Location */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="email">Email</FormLabel>
+                                    <FormControl>
+                                        <Input id="email" placeholder="Email Address" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="phone">Phone</FormLabel>
+                                    <FormControl>
+                                        <Input id="phone" placeholder="Phone Number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="location"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="location">Location</FormLabel>
+                                    <FormControl>
+                                        <Input id="location" placeholder="City, Country" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* Social Links */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField control={form.control} name="github" render={({ field }) => (
+                            <FormItem><FormLabel>GitHub</FormLabel><FormControl><Input placeholder="GitHub Profile URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="linkedin" render={({ field }) => (
+                            <FormItem><FormLabel>LinkedIn</FormLabel><FormControl><Input placeholder="LinkedIn Profile URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="facebook" render={({ field }) => (
+                            <FormItem><FormLabel>Facebook</FormLabel><FormControl><Input placeholder="Facebook Profile URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="twitter" render={({ field }) => (
+                            <FormItem><FormLabel>Twitter / X</FormLabel><FormControl><Input placeholder="Twitter Profile URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="youtube" render={({ field }) => (
+                            <FormItem><FormLabel>YouTube</FormLabel><FormControl><Input placeholder="YouTube Channel URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="instagram" render={({ field }) => (
+                            <FormItem><FormLabel>Instagram</FormLabel><FormControl><Input placeholder="Instagram Profile URL" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                    </div>
                 </section>
 
                 {/* Submit Button */}
