@@ -19,6 +19,7 @@ import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
 import { CalendarIcon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -237,11 +238,16 @@ export default function ProjectForm() {
                                 <FormMessage />
                                 {thumbnailPreview && (
                                     <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
-                                        <img
+                                        <div className="relative h-40 w-full">
+                                            <Image
                                             src={thumbnailPreview}
                                             alt="Thumbnail preview"
-                                            className="h-40 w-full rounded-md object-cover"
-                                        />
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="rounded-md object-cover"
+                                            unoptimized
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </FormItem>
@@ -272,12 +278,15 @@ export default function ProjectForm() {
                                         {imagePreviews.map((previewUrl, index) => (
                                             <div
                                                 key={`${previewUrl}-${index}`}
-                                                className="overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
+                                                className="relative h-28 overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
                                             >
-                                                <img
+                                                <Image
                                                     src={previewUrl}
                                                     alt={`Project preview ${index + 1}`}
-                                                    className="h-28 w-full rounded-md object-cover"
+                                                    fill
+                                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                                    className="rounded-md object-cover"
+                                                    unoptimized
                                                 />
                                             </div>
                                         ))}

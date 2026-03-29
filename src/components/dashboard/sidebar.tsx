@@ -130,6 +130,30 @@ const Sidebar: FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                                 setSidebarOpen={setSidebarOpen}
                             />
+                            <SideBarMenuItem
+                                menu={{
+                                    name: "Education",
+                                    icon: "GraduationCap",
+                                    path: "/dashboard/education",
+                                }}
+                                setSidebarOpen={setSidebarOpen}
+                            />
+                            <SideBarMenuItem
+                                menu={{
+                                    name: "Courses",
+                                    icon: "BookOpen",
+                                    path: "/dashboard/courses",
+                                }}
+                                setSidebarOpen={setSidebarOpen}
+                            />
+                            <SideBarMenuItem
+                                menu={{
+                                    name: "Certifications",
+                                    icon: "Award",
+                                    path: "/dashboard/certifications",
+                                }}
+                                setSidebarOpen={setSidebarOpen}
+                            />
                         </ul>
                     </nav>
                 </div>

@@ -20,6 +20,7 @@ import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
 import { CalendarIcon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -88,8 +89,14 @@ const getExistingProjectImageUrls = (project?: Project | null) => {
         .filter(Boolean) as string[];
 };
 
+const getExistingProjectThumbnailUrl = (project?: Project | null) => {
+    return typeof project?.thumbnail === "string" ? project.thumbnail : null;
+};
+
 export default function EditProjectForm({ project }: EditProjectProps) {
-    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(project?.thumbnail ?? null);
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
+        getExistingProjectThumbnailUrl(project)
+    );
     const [imagePreviews, setImagePreviews] = useState<string[]>(getExistingProjectImageUrls(project));
     const form = useForm<ProjectEditFormValues>({
         defaultValues: getDefaultValues(project),
@@ -110,7 +117,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
 
     useEffect(
         () => {
-            setThumbnailPreview(project?.thumbnail ?? null);
+            setThumbnailPreview(getExistingProjectThumbnailUrl(project));
             setImagePreviews(getExistingProjectImageUrls(project));
             reset(getDefaultValues(project));
         },
@@ -123,7 +130,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                 URL.revokeObjectURL(currentPreview);
             }
 
-            return file ? URL.createObjectURL(file) : project?.thumbnail ?? null;
+            return file ? URL.createObjectURL(file) : getExistingProjectThumbnailUrl(project);
         });
     };
 
@@ -152,7 +159,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
             toast.success("Project Successfully Updated");
             reset(getDefaultValues(project));
         }
-    }, [isError, isSuccess, error, reset]);
+    }, [isError, isSuccess, error, project, reset]);
 
     const onSubmit = async (data: ProjectEditFormValues) => {
         const { thumbnail, images, ...projectData } = data;
@@ -260,11 +267,16 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                 <FormMessage />
                                 {thumbnailPreview && (
                                     <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
-                                        <img
+                                        <div className="relative h-40 w-full">
+                                            <Image
                                             src={thumbnailPreview}
                                             alt="Thumbnail preview"
-                                            className="h-40 w-full rounded-md object-cover"
-                                        />
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="rounded-md object-cover"
+                                            unoptimized
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </FormItem>
@@ -295,12 +307,15 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                         {imagePreviews.map((previewUrl, index) => (
                                             <div
                                                 key={`${previewUrl}-${index}`}
-                                                className="overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
+                                                className="relative h-28 overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
                                             >
-                                                <img
+                                                <Image
                                                     src={previewUrl}
                                                     alt={`Project preview ${index + 1}`}
-                                                    className="h-28 w-full rounded-md object-cover"
+                                                    fill
+                                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                                    className="rounded-md object-cover"
+                                                    unoptimized
                                                 />
                                             </div>
                                         ))}

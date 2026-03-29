@@ -17,6 +17,7 @@ import { ErrorResponse } from "@/types";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -186,11 +187,16 @@ export default function PostForm() {
                                 <FormMessage />
                                 {thumbnailPreview && (
                                     <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
-                                        <img
+                                        <div className="relative h-40 w-full">
+                                            <Image
                                             src={thumbnailPreview}
                                             alt="Post thumbnail preview"
-                                            className="h-40 w-full rounded-md object-cover"
-                                        />
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="rounded-md object-cover"
+                                            unoptimized
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </FormItem>

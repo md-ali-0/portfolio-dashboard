@@ -18,6 +18,7 @@ import { ErrorResponse, Post } from "@/types";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -64,8 +65,22 @@ const getDefaultValues = (post?: Post | null): PostEditFormValues => ({
     metaDesc: post?.metaDesc ?? "",
 });
 
+const getPostThumbnailPreview = (post?: Post | null) => {
+    if (typeof post?.featuredImage === "string" && post.featuredImage) {
+        return post.featuredImage;
+    }
+
+    if (typeof post?.thumbnail === "string" && post.thumbnail) {
+        return post.thumbnail;
+    }
+
+    return null;
+};
+
 export default function EditPostForm({post}: EditPostProps) {
-    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(post?.featuredImage || post?.thumbnail || null);
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
+        getPostThumbnailPreview(post)
+    );
     const form = useForm<PostEditFormValues>({
         defaultValues: getDefaultValues(post),
     });
@@ -105,7 +120,7 @@ export default function EditPostForm({post}: EditPostProps) {
 
     useEffect(
         () => {
-            setThumbnailPreview(post?.featuredImage || post?.thumbnail || null);
+            setThumbnailPreview(getPostThumbnailPreview(post));
             reset(getDefaultValues(post));
         },
         [post, reset]
@@ -117,7 +132,7 @@ export default function EditPostForm({post}: EditPostProps) {
                 URL.revokeObjectURL(currentPreview);
             }
 
-            return file ? URL.createObjectURL(file) : post?.featuredImage || post?.thumbnail || null;
+            return file ? URL.createObjectURL(file) : getPostThumbnailPreview(post);
         });
     };
 
@@ -208,11 +223,16 @@ export default function EditPostForm({post}: EditPostProps) {
                                 <FormMessage />
                                 {thumbnailPreview && (
                                     <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
-                                        <img
+                                        <div className="relative h-40 w-full">
+                                            <Image
                                             src={thumbnailPreview}
                                             alt="Post thumbnail preview"
-                                            className="h-40 w-full rounded-md object-cover"
-                                        />
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="rounded-md object-cover"
+                                            unoptimized
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </FormItem>
