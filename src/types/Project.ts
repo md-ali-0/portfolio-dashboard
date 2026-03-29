@@ -1,3 +1,11 @@
+export type ProjectImage = {
+    id: string;
+    url: string;
+    projectId: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+};
+
 export type Project = {
     thumbnail: string | null;
     id: string;
@@ -5,7 +13,7 @@ export type Project = {
     slug: string;
     content: string;
     authorId: string;
-    images: string[] | null;
+    images: Array<string | ProjectImage> | null;
     liveUrl: string | null;
     SourceFront: string | null;
     SourceBack: string | null;

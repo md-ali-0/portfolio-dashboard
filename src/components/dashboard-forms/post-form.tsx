@@ -17,7 +17,7 @@ import { ErrorResponse } from "@/types";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -46,6 +46,7 @@ const normalizeOptionalString = (value?: string) => {
 };
 
 export default function PostForm() {
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const form = useForm<PostFormValues>({
         defaultValues: {
             title: "",
@@ -90,6 +91,16 @@ export default function PostForm() {
             reset();
         }
     }, [isError, isSuccess, error, reset]);
+
+    const updateThumbnailPreview = (file?: File | null) => {
+        setThumbnailPreview((currentPreview) => {
+            if (currentPreview?.startsWith("blob:")) {
+                URL.revokeObjectURL(currentPreview);
+            }
+
+            return file ? URL.createObjectURL(file) : null;
+        });
+    };
 
     const onSubmit = async (data: PostFormValues) => {
         const reviewData = {
@@ -164,12 +175,24 @@ export default function PostForm() {
                                         id="thumbnail"
                                         type="file"
                                         required
-                                        onChange={(e) =>
-                                            field.onChange(e.target.files?.[0])
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] || null;
+                                            field.onChange(file);
+                                            updateThumbnailPreview(file);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {thumbnailPreview && (
+                                    <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
+                                        <img
+                                            src={thumbnailPreview}
+                                            alt="Post thumbnail preview"
+                                            className="h-40 w-full rounded-md object-cover"
+                                        />
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />

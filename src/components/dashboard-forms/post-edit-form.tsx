@@ -18,7 +18,7 @@ import { ErrorResponse, Post } from "@/types";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { Editor } from "@tinymce/tinymce-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -65,6 +65,7 @@ const getDefaultValues = (post?: Post | null): PostEditFormValues => ({
 });
 
 export default function EditPostForm({post}: EditPostProps) {
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(post?.featuredImage || post?.thumbnail || null);
     const form = useForm<PostEditFormValues>({
         defaultValues: getDefaultValues(post),
     });
@@ -103,10 +104,22 @@ export default function EditPostForm({post}: EditPostProps) {
     }, [isError, isSuccess, error, post, reset]);
 
     useEffect(
-        () =>
-            reset(getDefaultValues(post)),
+        () => {
+            setThumbnailPreview(post?.featuredImage || post?.thumbnail || null);
+            reset(getDefaultValues(post));
+        },
         [post, reset]
     );
+
+    const updateThumbnailPreview = (file?: File | null) => {
+        setThumbnailPreview((currentPreview) => {
+            if (currentPreview?.startsWith("blob:")) {
+                URL.revokeObjectURL(currentPreview);
+            }
+
+            return file ? URL.createObjectURL(file) : post?.featuredImage || post?.thumbnail || null;
+        });
+    };
 
     const onSubmit = async (data: PostEditFormValues) => {
         const loadingToast = toast.loading("Post is Updating...");
@@ -184,12 +197,24 @@ export default function EditPostForm({post}: EditPostProps) {
                                     <Input
                                         id="thumbnail"
                                         type="file"
-                                        onChange={(e) =>
-                                            field.onChange(e.target.files?.[0])
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] || null;
+                                            field.onChange(file);
+                                            updateThumbnailPreview(file);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {thumbnailPreview && (
+                                    <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
+                                        <img
+                                            src={thumbnailPreview}
+                                            alt="Post thumbnail preview"
+                                            className="h-40 w-full rounded-md object-cover"
+                                        />
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />

@@ -20,7 +20,7 @@ import { formatDate } from "@/utils/date-format";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Calendar } from "../ui/calendar";
@@ -82,7 +82,15 @@ const normalizeOptionalString = (value?: string | null) => {
     return normalizedValue ? normalizedValue : undefined;
 };
 
+const getExistingProjectImageUrls = (project?: Project | null) => {
+    return (project?.images || [])
+        .map((image) => (typeof image === "string" ? image : image?.url))
+        .filter(Boolean) as string[];
+};
+
 export default function EditProjectForm({ project }: EditProjectProps) {
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(project?.thumbnail ?? null);
+    const [imagePreviews, setImagePreviews] = useState<string[]>(getExistingProjectImageUrls(project));
     const form = useForm<ProjectEditFormValues>({
         defaultValues: getDefaultValues(project),
     });
@@ -101,10 +109,35 @@ export default function EditProjectForm({ project }: EditProjectProps) {
         useUpdateProjectMutation();
 
     useEffect(
-        () =>
-            reset(getDefaultValues(project)),
+        () => {
+            setThumbnailPreview(project?.thumbnail ?? null);
+            setImagePreviews(getExistingProjectImageUrls(project));
+            reset(getDefaultValues(project));
+        },
         [project, reset]
     );
+
+    const updateThumbnailPreview = (file?: File | null) => {
+        setThumbnailPreview((currentPreview) => {
+            if (currentPreview?.startsWith("blob:")) {
+                URL.revokeObjectURL(currentPreview);
+            }
+
+            return file ? URL.createObjectURL(file) : project?.thumbnail ?? null;
+        });
+    };
+
+    const updateImagePreviews = (files?: FileList | null) => {
+        setImagePreviews((currentPreviews) => {
+            currentPreviews
+                .filter((previewUrl) => previewUrl.startsWith("blob:"))
+                .forEach((previewUrl) => URL.revokeObjectURL(previewUrl));
+
+            return files
+                ? Array.from(files).map((file) => URL.createObjectURL(file))
+                : getExistingProjectImageUrls(project);
+        });
+    };
 
     useEffect(() => {
         if (isError) {
@@ -216,12 +249,24 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                     <Input
                                         id="thumbnail"
                                         type="file"
-                                        onChange={(e) =>
-                                            field.onChange(e.target.files?.[0])
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] || null;
+                                            field.onChange(file);
+                                            updateThumbnailPreview(file);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {thumbnailPreview && (
+                                    <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
+                                        <img
+                                            src={thumbnailPreview}
+                                            alt="Thumbnail preview"
+                                            className="h-40 w-full rounded-md object-cover"
+                                        />
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />
@@ -236,14 +281,31 @@ export default function EditProjectForm({ project }: EditProjectProps) {
                                         id="images"
                                         type="file"
                                         multiple
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                e.target.files || null
-                                            )
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const files = e.target.files || null;
+                                            field.onChange(files);
+                                            updateImagePreviews(files);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {imagePreviews.length > 0 && (
+                                    <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
+                                        {imagePreviews.map((previewUrl, index) => (
+                                            <div
+                                                key={`${previewUrl}-${index}`}
+                                                className="overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
+                                            >
+                                                <img
+                                                    src={previewUrl}
+                                                    alt={`Project preview ${index + 1}`}
+                                                    className="h-28 w-full rounded-md object-cover"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />

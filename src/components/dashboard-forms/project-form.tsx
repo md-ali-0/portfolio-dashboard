@@ -18,7 +18,7 @@ import { formatDate } from "@/utils/date-format";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
 import { CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Calendar } from "../ui/calendar";
@@ -58,6 +58,8 @@ const normalizeOptionalString = (value?: string) => {
 };
 
 export default function ProjectForm() {
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const form = useForm<ProjectFormValues>({
         defaultValues: {
             title: "",
@@ -104,6 +106,26 @@ export default function ProjectForm() {
             reset();
         }
     }, [isError, isSuccess, error, reset]);
+
+    const updateThumbnailPreview = (file?: File | null) => {
+        setThumbnailPreview((currentPreview) => {
+            if (currentPreview?.startsWith("blob:")) {
+                URL.revokeObjectURL(currentPreview);
+            }
+
+            return file ? URL.createObjectURL(file) : null;
+        });
+    };
+
+    const updateImagePreviews = (files?: FileList | null) => {
+        setImagePreviews((currentPreviews) => {
+            currentPreviews
+                .filter((previewUrl) => previewUrl.startsWith("blob:"))
+                .forEach((previewUrl) => URL.revokeObjectURL(previewUrl));
+
+            return files ? Array.from(files).map((file) => URL.createObjectURL(file)) : [];
+        });
+    };
 
     const onSubmit = async (data: ProjectFormValues) => {
         const { thumbnail, images, ...projectData } = data;
@@ -204,12 +226,24 @@ export default function ProjectForm() {
                                         id="thumbnail"
                                         type="file"
                                         required
-                                        onChange={(e) =>
-                                            field.onChange(e.target.files?.[0])
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] || null;
+                                            field.onChange(file);
+                                            updateThumbnailPreview(file);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {thumbnailPreview && (
+                                    <div className="mt-3 overflow-hidden rounded-lg border border-border bg-muted/30 p-2">
+                                        <img
+                                            src={thumbnailPreview}
+                                            alt="Thumbnail preview"
+                                            className="h-40 w-full rounded-md object-cover"
+                                        />
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />
@@ -224,14 +258,31 @@ export default function ProjectForm() {
                                         id="images"
                                         type="file"
                                         multiple
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                e.target.files || null
-                                            )
-                                        }
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const files = e.target.files || null;
+                                            field.onChange(files);
+                                            updateImagePreviews(files);
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
+                                {imagePreviews.length > 0 && (
+                                    <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
+                                        {imagePreviews.map((previewUrl, index) => (
+                                            <div
+                                                key={`${previewUrl}-${index}`}
+                                                className="overflow-hidden rounded-lg border border-border bg-muted/30 p-2"
+                                            >
+                                                <img
+                                                    src={previewUrl}
+                                                    alt={`Project preview ${index + 1}`}
+                                                    className="h-28 w-full rounded-md object-cover"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </FormItem>
                         )}
                     />
