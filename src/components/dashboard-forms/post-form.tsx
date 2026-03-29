@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "@/provider/session-provider";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { useCreatePostMutation } from "@/redux/features/post/postApi";
 import { ErrorResponse } from "@/types";
@@ -36,14 +35,17 @@ type PostFormValues = {
     content: string;
     thumbnail: File | null;
     categoryId: string;
-    authorId: string;
     metaTitle: string;
     metaKey: string;
     metaDesc: string;
 };
 
+const normalizeOptionalString = (value?: string) => {
+    const normalizedValue = value?.trim();
+    return normalizedValue ? normalizedValue : undefined;
+};
+
 export default function PostForm() {
-    const { session } = useSession();
     const form = useForm<PostFormValues>({
         defaultValues: {
             title: "",
@@ -93,13 +95,12 @@ export default function PostForm() {
         const reviewData = {
             title: data.title,
             slug: data.slug,
-            excerpt: data.excerpt || "",
+            excerpt: normalizeOptionalString(data.excerpt),
             categoryId: data.categoryId,
-            authorId: session?.user,
             content: data.content,
-            metaTitle: data.metaTitle || "",
-            metaKey: data.metaKey || "",
-            metaDesc: data.metaDesc || "",
+            metaTitle: normalizeOptionalString(data.metaTitle),
+            metaKey: normalizeOptionalString(data.metaKey),
+            metaDesc: normalizeOptionalString(data.metaDesc),
         };
         const formData = new FormData();
         if (data.thumbnail) {
@@ -162,6 +163,7 @@ export default function PostForm() {
                                     <Input
                                         id="thumbnail"
                                         type="file"
+                                        required
                                         onChange={(e) =>
                                             field.onChange(e.target.files?.[0])
                                         }

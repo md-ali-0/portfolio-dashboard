@@ -31,26 +31,60 @@ interface EditProjectProps {
     project: Project | null;
 }
 
+type ProjectEditFormValues = {
+    id?: string;
+    title: string;
+    slug: string;
+    content: string;
+    thumbnail: File | null;
+    images: FileList | null;
+    liveUrl?: string;
+    SourceFront?: string;
+    SourceBack?: string;
+    StartDate?: string | Date;
+    EndDate?: string | Date;
+    metaTitle?: string;
+    metaDesc?: string;
+    metaKey?: string;
+    languages: string[];
+    technologies: string[];
+};
+
+const getDefaultValues = (project?: Project | null): ProjectEditFormValues => ({
+    id: project?.id,
+    title: project?.title ?? "",
+    slug: project?.slug ?? "",
+    content: project?.content ?? "",
+    thumbnail: null,
+    images: null,
+    liveUrl: project?.liveUrl ?? "",
+    SourceFront: project?.SourceFront ?? "",
+    SourceBack: project?.SourceBack ?? "",
+    StartDate: project?.StartDate ?? undefined,
+    EndDate: project?.EndDate ?? undefined,
+    metaTitle: project?.metaTitle ?? "",
+    metaDesc: project?.metaDesc ?? "",
+    metaKey: project?.metaKey ?? "",
+    languages: project?.languages ?? [],
+    technologies: project?.technologies ?? [],
+});
+
+const toIsoString = (value?: string | Date | null) => {
+    if (!value) {
+        return undefined;
+    }
+
+    return value instanceof Date ? value.toISOString() : value;
+};
+
+const normalizeOptionalString = (value?: string | null) => {
+    const normalizedValue = value?.trim();
+    return normalizedValue ? normalizedValue : undefined;
+};
+
 export default function EditProjectForm({ project }: EditProjectProps) {
-    const form = useForm<Project>({
-        defaultValues: project || {
-            title: "",
-            slug: "",
-            content: "",
-            thumbnail: null,
-            images: null,
-            liveUrl: "",
-            SourceFront: "",
-            SourceBack: "",
-            StartDate: undefined,
-            EndDate: undefined,
-            metaTitle: "",
-            metaDesc: "",
-            metaKey: "",
-            languages: [],
-            technologies: [],
-        },
-        values: project || undefined,
+    const form = useForm<ProjectEditFormValues>({
+        defaultValues: getDefaultValues(project),
     });
 
     const { session } = useSession();
@@ -68,23 +102,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
 
     useEffect(
         () =>
-            reset(
-                project || {
-                    title: "",
-                    slug: "",
-                    content: "",
-                    thumbnail: null,
-                    images: null,
-                    liveUrl: "",
-                    StartDate: undefined,
-                    EndDate: undefined,
-                    metaTitle: "",
-                    metaDesc: "",
-                    metaKey: "",
-                    languages: [],
-                    technologies: [],
-                }
-            ),
+            reset(getDefaultValues(project)),
         [project, reset]
     );
 
@@ -98,31 +116,33 @@ export default function EditProjectForm({ project }: EditProjectProps) {
 
             toast.error(errorMessage);
         } else if (isSuccess) {
-            toast.success("Project Successfully Added");
-            reset();
+            toast.success("Project Successfully Updated");
+            reset(getDefaultValues(project));
         }
     }, [isError, isSuccess, error, reset]);
 
-    const onSubmit = async (data: Project) => {
+    const onSubmit = async (data: ProjectEditFormValues) => {
         const { thumbnail, images, ...projectData } = data;
 
         const formData = new FormData();
-        if (thumbnail) {
+        if (thumbnail instanceof File) {
             formData.append("thumbnail", thumbnail);
         }
-        if (images) {
+        if (images instanceof FileList) {
             Array.from(images).forEach((image) => {
                 formData.append("images", image);
             });
         }
         const sanitizedProjectData = {
             ...projectData,
-            liveUrl: projectData.liveUrl || undefined,
-            SourceFront: projectData.SourceFront || undefined,
-            SourceBack: projectData.SourceBack || undefined,
-            metaTitle: projectData.metaTitle || undefined,
-            metaDesc: projectData.metaDesc || undefined,
-            metaKey: projectData.metaKey || undefined,
+            liveUrl: normalizeOptionalString(projectData.liveUrl),
+            SourceFront: normalizeOptionalString(projectData.SourceFront),
+            SourceBack: normalizeOptionalString(projectData.SourceBack),
+            metaTitle: normalizeOptionalString(projectData.metaTitle),
+            metaDesc: normalizeOptionalString(projectData.metaDesc),
+            metaKey: normalizeOptionalString(projectData.metaKey),
+            StartDate: toIsoString(projectData.StartDate),
+            EndDate: toIsoString(projectData.EndDate),
             authorId: session?.user
         };
 
@@ -518,7 +538,7 @@ export default function EditProjectForm({ project }: EditProjectProps) {
 
                 <div className="py-5">
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? "Updating Post..." : "Update Post"}
+                        {isLoading ? "Updating Project..." : "Update Project"}
                     </Button>
                 </div>
                 </form>

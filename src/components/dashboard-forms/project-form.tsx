@@ -35,13 +35,26 @@ type ProjectFormValues = {
     liveUrl?: string;
     SourceFront?: string;
     SourceBack?: string;
-    StartDate: string;
-    EndDate?: string;
+    StartDate: string | Date;
+    EndDate?: string | Date;
     metaTitle?: string;
     metaDesc?: string;
     metaKey?: string;
     languages: string[];
     technologies: string[];
+};
+
+const toIsoString = (value?: string | Date | null) => {
+    if (!value) {
+        return undefined;
+    }
+
+    return value instanceof Date ? value.toISOString() : value;
+};
+
+const normalizeOptionalString = (value?: string) => {
+    const normalizedValue = value?.trim();
+    return normalizedValue ? normalizedValue : undefined;
 };
 
 export default function ProjectForm() {
@@ -106,12 +119,14 @@ export default function ProjectForm() {
         }
         const sanitizedProjectData = {
             ...projectData,
-            liveUrl: projectData.liveUrl || undefined,
-            SourceFront: projectData.SourceFront || undefined,
-            SourceBack: projectData.SourceBack || undefined,
-            metaTitle: projectData.metaTitle || undefined,
-            metaDesc: projectData.metaDesc || undefined,
-            metaKey: projectData.metaKey || undefined,
+            liveUrl: normalizeOptionalString(projectData.liveUrl),
+            SourceFront: normalizeOptionalString(projectData.SourceFront),
+            SourceBack: normalizeOptionalString(projectData.SourceBack),
+            metaTitle: normalizeOptionalString(projectData.metaTitle),
+            metaDesc: normalizeOptionalString(projectData.metaDesc),
+            metaKey: normalizeOptionalString(projectData.metaKey),
+            StartDate: toIsoString(projectData.StartDate),
+            EndDate: toIsoString(projectData.EndDate),
             authorId: session?.user
         };
 
@@ -188,6 +203,7 @@ export default function ProjectForm() {
                                     <Input
                                         id="thumbnail"
                                         type="file"
+                                        required
                                         onChange={(e) =>
                                             field.onChange(e.target.files?.[0])
                                         }

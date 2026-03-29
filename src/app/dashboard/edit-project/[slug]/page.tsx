@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 
 export default async function EditProjectPage( { params : {slug}} : {params: {slug: string}}) {
 
-    const result = await fetch(`${config.host}/api/project/${slug}`, {
+    const result = await fetch(`${config.host}/api/v1/project/${slug}`, {
         cache: "no-store"
     })
     const project = await result.json()

@@ -33,29 +33,40 @@ interface EditPostProps {
     post: Post | null;
 }
 
+type PostEditFormValues = {
+    id?: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    thumbnail: File | null;
+    categoryId: string;
+    content: string;
+    metaTitle: string;
+    metaKey: string;
+    metaDesc: string;
+};
+
+const normalizeOptionalString = (value?: string | null) => {
+    const normalizedValue = value?.trim();
+    return normalizedValue ? normalizedValue : undefined;
+};
+
+const getDefaultValues = (post?: Post | null): PostEditFormValues => ({
+    id: post?.id,
+    title: post?.title ?? "",
+    slug: post?.slug ?? "",
+    excerpt: post?.excerpt ?? "",
+    thumbnail: null,
+    categoryId: post?.categoryId ?? "",
+    content: post?.content ?? "",
+    metaTitle: post?.metaTitle ?? "",
+    metaKey: post?.metaKey ?? "",
+    metaDesc: post?.metaDesc ?? "",
+});
+
 export default function EditPostForm({post}: EditPostProps) {
-
-    const initialPostData = post ? {
-        ...post,
-        excerpt: post.excerpt || "",
-        metaTitle: post.metaTitle || "",
-        metaKey: post.metaKey || "",
-        metaDesc: post.metaDesc || "",
-    } : undefined;
-
-    const form = useForm<Post>({
-        defaultValues: initialPostData || {
-            title: "",
-            slug: "",
-            excerpt: "",
-            thumbnail: "",
-            categoryId: "",
-            authorId: "",
-            metaTitle: "",
-            metaKey: "",
-            metaDesc: "",
-        },
-        values: initialPostData as Post | undefined,
+    const form = useForm<PostEditFormValues>({
+        defaultValues: getDefaultValues(post),
     });
 
     const { data: categories, isLoading: isCategoryLoading } = useGetAllCategoriesQuery([
@@ -87,47 +98,37 @@ export default function EditPostForm({post}: EditPostProps) {
             toast.error(errorMessage);
         } else if (isSuccess) {
             toast.success("Post Successfully Updated");
+            reset(getDefaultValues(post));
         }
-    }, [isError, isSuccess, error]);
+    }, [isError, isSuccess, error, post, reset]);
 
     useEffect(
         () =>
-            reset(
-                post || {
-                    title: "",
-                    slug: "",
-                    excerpt: "",
-                    thumbnail: "",
-                    categoryId: "",
-                    authorId: "",
-                    metaTitle: "",
-                    metaDesc: "",
-                }
-            ),
+            reset(getDefaultValues(post)),
         [post, reset]
     );
 
-    const onSubmit = async (data: Post) => {
+    const onSubmit = async (data: PostEditFormValues) => {
         const loadingToast = toast.loading("Post is Updating...");
 
         const formData = new FormData();
 
-        const productData = {
+        const postData = {
             title: data.title,
             slug: data.slug,
-            content:  data.content,
-            excerpt: data.excerpt || undefined, 
+            content: data.content,
+            excerpt: normalizeOptionalString(data.excerpt),
             categoryId: data.categoryId,
-            metaTitle: data.metaTitle || undefined,
-            metaKey: data.metaKey || undefined,
-            metaDesc: data.metaDesc || undefined,
+            metaTitle: normalizeOptionalString(data.metaTitle),
+            metaKey: normalizeOptionalString(data.metaKey),
+            metaDesc: normalizeOptionalString(data.metaDesc),
         };
 
-        if ((data.thumbnail as any) instanceof File) {
-            formData.append("thumbnail", data.thumbnail as File);
+        if (data.thumbnail instanceof File) {
+            formData.append("thumbnail", data.thumbnail);
         }
 
-        formData.append("data", JSON.stringify(productData));
+        formData.append("data", JSON.stringify(postData));
         if (post) {
             await updatePost({formData, id: post?.id});
         }
