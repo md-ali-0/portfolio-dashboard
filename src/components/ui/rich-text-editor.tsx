@@ -32,10 +32,12 @@ export default function RichTextEditor({
 
     return (
         <Editor
-            apiKey="lqre26087xr8qx73ci2q2p5xufo4o5b5zm0vcrt203awvvnx"
             tinymceScriptSrc="/tinymce/tinymce.min.js"
             value={value}
+            licenseKey="gpl"
             init={{
+                base_url: "/tinymce",
+                suffix: ".min",
                 height,
                 plugins: [
                     "anchor",
@@ -56,10 +58,11 @@ export default function RichTextEditor({
                     "undo redo | bold italic underline strikethrough | image link code table | align lineheight | numlist bullist indent outdent | charmap | removeformat",
                 images_upload_url: "/api/upload",
                 branding: false,
-                skin_url: "/tinymce/skins/ui/oxide",
-                content_css: "/tinymce/skins/content/default/content.min.css",
+                promotion: false,
+                skin_url: "/tinymce/skins/ui/oxide-dark",
+                content_css: "/tinymce/skins/content/dark/content.min.css",
                 content_style:
-                    "body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:14px; background-color:#ffffff; color:#111827; }",
+                    "body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:14px; background-color:#18181b; color:#f4f4f5; }",
             }}
             onEditorChange={onChange}
             onBlur={onBlur}
