@@ -33,6 +33,7 @@ export default function RichTextEditor({
     return (
         <Editor
             apiKey="lqre26087xr8qx73ci2q2p5xufo4o5b5zm0vcrt203awvvnx"
+            tinymceScriptSrc="/tinymce/tinymce.min.js"
             value={value}
             init={{
                 height,
