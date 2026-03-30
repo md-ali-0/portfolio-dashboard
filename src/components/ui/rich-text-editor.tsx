@@ -60,7 +60,7 @@ export default function RichTextEditor({
                 branding: false,
                 promotion: false,
                 skin_url: "/tinymce/skins/ui/tinymce-5-dark",
-                content_css: "/tinymce/skins/content/dark/content.min.css",
+                content_css: "/tinymce/skins/content/tinymce-5-dark/content.min.css",
                 content_style:
                     "body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:14px; background-color:#18181b; color:#f4f4f5; }",
             }}
