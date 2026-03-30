@@ -10,6 +10,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/provider/session-provider";
 import { useCreateProjectMutation } from "@/redux/features/project/projectApi";
@@ -17,7 +18,6 @@ import { ErrorResponse } from "@/types";
 import { formatDate } from "@/utils/date-format";
 import { generateSlug } from "@/utils/genereateSlug";
 import { SerializedError } from "@reduxjs/toolkit";
-import { Editor } from "@tinymce/tinymce-react";
 import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -405,38 +405,9 @@ export default function ProjectForm() {
                             <FormItem>
                                 <FormLabel htmlFor="content">Content</FormLabel>
                                 <FormControl>
-                                    <Editor
-                                        apiKey="lqre26087xr8qx73ci2q2p5xufo4o5b5zm0vcrt203awvvnx"
+                                    <RichTextEditor
                                         value={field.value || ""}
-                                        init={{
-                                            height: 500,
-                                            plugins: [
-                                                "anchor",
-                                                "autolink",
-                                                "charmap",
-                                                "codesample",
-                                                "image",
-                                                "code",
-                                                "link",
-                                                "lists",
-                                                "media",
-                                                "searchreplace",
-                                                "table",
-                                                "visualblocks",
-                                                "wordcount",
-                                            ],
-                                            toolbar:
-                                                "undo redo | bold italic underline strikethrough | image | link | code table | align lineheight | checklist numlist bullist indent outdent | charmap | removeformat",
-                                            images_upload_url: "/api/upload",
-                                            branding: false,
-                                            skin: "oxide-dark",
-                                            content_css: "dark",
-                                            content_style:
-                                                "body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:14px; background-color: #1c1c1e; color: #eeeeee; }",
-                                        }}
-                                        onEditorChange={(content) =>
-                                            field.onChange(content)
-                                        }
+                                        onChange={field.onChange}
                                         onBlur={() => field.onBlur()}
                                     />
                                 </FormControl>
