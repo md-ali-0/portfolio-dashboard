@@ -1,18 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const TinyMCEEditor = dynamic(
-    () => import("@tinymce/tinymce-react").then((module) => module.Editor),
-    {
-        ssr: false,
-        loading: () => (
-            <div className="min-h-[320px] rounded-md border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-                Loading editor...
-            </div>
-        ),
-    }
-);
+import { Editor } from "@tinymce/tinymce-react";
+import { useEffect, useState } from "react";
 
 type RichTextEditorProps = {
     value?: string;
@@ -27,8 +16,22 @@ export default function RichTextEditor({
     onBlur,
     height = 500,
 }: RichTextEditorProps) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return (
+            <div className="min-h-[320px] rounded-md border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+                Loading editor...
+            </div>
+        );
+    }
+
     return (
-        <TinyMCEEditor
+        <Editor
             apiKey="lqre26087xr8qx73ci2q2p5xufo4o5b5zm0vcrt203awvvnx"
             tinymceScriptSrc="/tinymce/tinymce.min.js"
             value={value}
